@@ -144,13 +144,13 @@
                     {{ $t('forms.apply') }}
                 </b-button>
                 <b-button
-                    v-if="!newThreat"
-                    variant="secondary"
-                    class="float-right"
-                    @click="hideModal()"
-                >
-                    {{ $t('forms.cancel') }}
-                </b-button>
+                v-if="!newThreat"
+                variant="secondary"
+                class="float-right mr-2"
+                @click="hideModal()"
+            >
+                {{ $t('forms.cancel') }}
+            </b-button>
                 </div>
             </template>
         </b-modal>
@@ -161,7 +161,7 @@
 import { mapState } from 'vuex';
 
 import { CELL_DATA_UPDATED } from '@/store/actions/cell.js';
-import { THREATMODEL_UPDATE } from '@/store/actions/threatmodel.js';
+import tmActions from '@/store/actions/threatmodel.js';
 import dataChanged from '@/service/x6/graph/data-changed.js';
 import threatModels from '@/service/threats/models/index.js';
 
@@ -173,15 +173,17 @@ export default {
             threatTop: (state) => state.threatmodel.data.detail.threatTop
         }),
         threatTypes() {
-            if (!this.threat || !this.threat.modelType) {
+            if (!this.cellRef || !this.threat || !this.threat.modelType) {
                 return [];
             }
 
             const res = [];
             const threatTypes = threatModels.getThreatTypesByElement(this.threat.modelType, this.cellRef.data.type);
             Object.keys(threatTypes).forEach((type) => {
-                res.push(this.$t(threatTypes[type]));
+                res.push(this.$t(type));
             }, this);
+            if(!res.includes(this.threat.type))
+                res.push(this.threat.type);
             return res;
         },
         statuses() {
@@ -193,9 +195,11 @@ export default {
         },
         priorities() {
             return [
+                { value: 'TBA', text: this.$t('threats.priority.tba') },
                 { value: 'Low', text: this.$t('threats.priority.low') },
                 { value: 'Medium', text: this.$t('threats.priority.medium') },
-                { value: 'High', text: this.$t('threats.priority.high') }
+                { value: 'High', text: this.$t('threats.priority.high') },
+                { value: 'Critical', text: this.$t('threats.priority.critical') }
             ];
         },
         modalTitle() { return this.$t('threats.edit') + ' #' + this.number; }
@@ -205,40 +209,42 @@ export default {
             threat: {},
             modelTypes: [
                 'CIA',
+                'DIE',
                 'LINDDUN',
+                'PLOT4ai',
                 'STRIDE'
             ],
-            newThreat: true,
             number: 0
         };
     },
     methods: {
-        editThreat(threatId) {
-            this.threat = this.cellRef.data.threats.find(x => x.id === threatId);
+        editThreat(threatId,state) {
+            const crnthreat = this.cellRef.data.threats.find(x => x.id === threatId);
+            this.threat = {...crnthreat};
             if (!this.threat) {
                 // this should never happen with a valid threatId
                 console.warn('Trying to access a non-existent threatId: ' + threatId);
             } else {
-                this.$refs.editModal.show();
-            }
-            this.newThreat = this.threat.new;
-
-            if (this.threat.new === true) {
-                // provide a new threat number that is unique project wide
-                if (this.threatTop) {
-                    this.number = this.threatTop + 1;
-                } else {
-                    this.number = 1;
-                }
-                this.$store.dispatch(THREATMODEL_UPDATE, { threatTop: this.number });
-            } else {
                 this.number = this.threat.number;
+                this.newThreat = state==='new';
+                this.$refs.editModal.show();
             }
         },
         updateThreat() {
-            const threatRef = this.threat;
-
+            const threatRef = this.cellRef.data.threats.find(x => x.id === this.threat.id);
             if (threatRef) {
+                const objRef = this.cellRef.data;
+                if(!objRef.threatFrequency){
+                    const tmpfreq = threatModels.getFrequencyMapByElement(this.threat.modelType,this.cellRef.data.type);
+                    if(tmpfreq!==null)
+                        objRef.threatFrequency = tmpfreq;
+                }
+                if(objRef.threatFrequency){
+                    Object.keys(objRef.threatFrequency).forEach((k)=>{
+                        if(this.$t(`threats.model.${this.threat.modelType.toLowerCase()}.${k}`)===this.threat.type)
+                            objRef.threatFrequency[k]++;
+                    });
+                }
                 threatRef.status = this.threat.status;
                 threatRef.severity = this.threat.severity;
                 threatRef.title = this.threat.title;
@@ -249,16 +255,24 @@ export default {
                 threatRef.new = false;
                 threatRef.number = this.number;
                 threatRef.score = this.threat.score;
-
                 this.$store.dispatch(CELL_DATA_UPDATED, this.cellRef.data);
+                this.$store.dispatch(tmActions.modified);
                 dataChanged.updateStyleAttrs(this.cellRef);
             }
             this.hideModal();
         },
         deleteThreat() {
+            if(!this.threat.new){
+                const threatMap = this.cellRef.data.threatFrequency;
+                Object.keys(threatMap).forEach((k)=>{
+                    if(this.$t(`threats.model.${this.threat.modelType.toLowerCase()}.${k}`)===this.threat.type)
+                        threatMap[k]--;
+                });
+            }
             this.cellRef.data.threats = this.cellRef.data.threats.filter(x => x.id !== this.threat.id);
             this.cellRef.data.hasOpenThreats = this.cellRef.data.threats.length > 0;
             this.$store.dispatch(CELL_DATA_UPDATED, this.cellRef.data);
+            this.$store.dispatch(tmActions.modified);
             dataChanged.updateStyleAttrs(this.cellRef);
         },
         hideModal() {

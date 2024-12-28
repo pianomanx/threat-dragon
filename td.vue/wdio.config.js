@@ -3,6 +3,13 @@ const { join } = require('path');
 process.env.IS_TEST = true;
 
 const config = {
+    runner: 'local',
+    reporters: ['spec','json'],
+    specs: [ './tests/e2e/desktop/*.spec.js' ],
+    exclude: [
+        // 'path/to/excluded/files'
+    ],
+    maxInstances: 10,
     services: [
         [
             'electron',
@@ -17,22 +24,17 @@ const config = {
         ],
     ],
     capabilities: [{
-        browserName: 'chrome',
-        'goog:chromeOptions': {
-            // run chrome headless
-            args: ['--headless', '--disable-gpu']
-        }
+        browserName: 'electron'
     }],
+    logLevel: 'debug',
+    bail: 1,
     hostname: 'localhost',
     port: 9519,
     waitforTimeout: 30000,
-    connectionRetryCount: 10,
+    connectionRetryCount: 1,
     connectionRetryTimeout: 30000,
-    logLevel: 'debug',
-    runner: 'local',
     // to redirect logs to files instead of console:
     outputDir: 'wdio-logs',
-    specs: ['./tests/e2e/desktop/*.spec.js'],
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',

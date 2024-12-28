@@ -4,7 +4,8 @@ const spa = {
     },
     nav: {
         v2Warning: 'Los modelos de amenazas(threat models) version 2.0 no son compatibles con los modelos de amenazas(threat model) de Threat Dragon versión 1.x. Los modelos importados de la versión 1.x serán actualizados acorde al esquema de la versión 2.0',
-        loggedInAs: 'Conectado como'
+        loggedInAs: 'Conectado como',
+        logOut: 'Log out'
     },
     home: {
         title: 'OWASP Threat Dragon',
@@ -18,6 +19,18 @@ const spa = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'Conectarse con'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'Conectarse con'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'Conectarse con'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'Conectarse con'
         },
         local: {
@@ -43,9 +56,12 @@ const spa = {
     desktop: {
         file: {
             heading: 'Archivo',
+            clearRecentDocs: 'Clear Menu',
             close: 'Cerrar modelo',
+            closeWindow: 'Close Window',
             new: 'Modelo nuevo',
             open: 'Abrir modelo',
+            recentDocs: 'Open Recent',
             save: 'Guardar modelo',
             saveAs: 'Guardar modelo como'
         },
@@ -105,6 +121,16 @@ const spa = {
                 defaultDescription: 'Descripción de nuevo diagrama LINDDUN',
                 select: 'LINDDUN'
             },
+            plot4ai: {
+                defaultTitle: 'Nuevo diagrama PLOT4ai',
+                defaultDescription: 'Descripción de nuevo diagrama PLOT4ai',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'New DIE diagram',
+                defaultDescription: 'Descripción de nuevo diagrama DIE',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'Nuevo diagrama CIA',
                 defaultDescription: 'Descripción de Nuevo diagrama CIA',
@@ -128,15 +154,20 @@ const spa = {
             text: 'Texto',
             description: 'Descripción',
             outOfScope: 'Fuera de contexto',
+            bidirection: 'Bidirectional',
             reasonOutOfScope: 'Razón para estar fuera de contexto',
-            privilegeLevel: 'Nivel de Privilegio',
+            handlesCardPayment: 'Card payment',
+            handlesGoodsOrServices: 'Goods or Services',
             isALog: 'Es un Log',
-            storesCredentials: 'Almacena Credenciales',
             isEncrypted: 'Está cifrado',
             isSigned: 'Está firmado',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'Nivel de Privilegio',
             providesAuthentication: 'Provee Autenticación',
             protocol: 'Protocolo',
-            publicNetwork: 'Red Pública'
+            publicNetwork: 'Red Pública',
+            storesCredentials: 'Almacena Credenciales',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'Eliminar seleccionado',
@@ -180,6 +211,10 @@ const spa = {
             zoom: {
                 shortcut: '(ctrl/cmd) + rueda de desplazamiento del ratón',
                 action: 'Zoom'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -209,6 +244,11 @@ const spa = {
         discardTitle: '¿Descartar los cambios?',
         discardMessage: '¿Está seguro de descartar sus cambios?',
         edit: 'Editar',
+        exportAs: 'Export Model As',
+        exportHtml: 'Reporte HTML',
+        exportPdf: 'Reporte PDF',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'Importar',
         ok: 'OK',
         open: 'Abrir',
@@ -219,11 +259,11 @@ const spa = {
         report: 'Reporte',
         save: 'Guardar',
         saveAs: 'Guardar como',
-        saveHtml: 'Exportar HTML',
         saveModel: 'Guardar modelo',
         saveModelAs: 'Guardar modelo como',
-        savePdf: 'Exportar PDF',
-        search: 'Buscar'
+        search: 'Buscar',
+        next: 'próximo',
+        previous: 'Previo'
     },
     threats: {
         model: {
@@ -232,6 +272,12 @@ const spa = {
                 confidentiality: 'Confidentiality - Confidencialidad',
                 integrity: 'Integrity - Integridad',
                 availability: 'Availability - Disponibilidad'
+            },
+            die: {
+                header: '--- DIE ---',
+                distributed: 'Distributed',
+                immutable: 'Immutable',
+                ephemeral: 'Ephemeral'
             },
             linddun: {
                 header: '--- LINDDUN ---',
@@ -242,6 +288,17 @@ const spa = {
                 disclosureOfInformation: 'Disclosure of information / Brecha de información ',
                 unawareness: 'Unawareness / Falta de Conciencia',
                 nonCompliance: 'Non-compliance / Incumplimiento'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'Technique & Processes',
+                accessibility: 'Accessibility',
+                identifiabilityLinkability: 'Identifiability & Linkability',
+                security: 'Security',
+                safety: 'Safety',
+                unawareness: 'Unawareness',
+                ethicsHumanRights: 'Ethics & Human Rights',
+                nonCompliance: 'Non-compliance'
             },
             stride: {
                 header: '--- STRIDE ---',
@@ -256,7 +313,9 @@ const spa = {
         generic: {
             default: 'Nueva amenaza genérica',
             cia: 'Nueva amenaza CIA',
+            die: 'Nueva amenaza DIE',
             linddun: 'Nueva amenaza LINDDUN',
+            plot4ai: 'Nueva amenaza PLOT4ai',
             stride: 'Nueva amenaza STRIDE'
         },
         edit: 'Editar amenaza',
@@ -285,9 +344,11 @@ const spa = {
             mitigated: 'Mitigado'
         },
         priority: {
+            tba: 'Por confirmar',
             low: 'Baja',
             medium: 'Media',
-            high: 'Alta'
+            high: 'Alta',
+            critical: 'Crítica'
         }
     },
     report: {
@@ -296,6 +357,7 @@ const spa = {
             showMitigatedThreats: 'Mostrar amenazas mitigadas',
             showModelDiagrams: 'Mostrar diagramas de modelo',
             showEmpty: 'Show empty elements',
+            showProperties: 'Show element properties',
             showBranding: 'Marca de Threat Dragon'
         },
         title: 'Reporte de modelo de amenaza para',
@@ -307,9 +369,11 @@ const spa = {
             total: 'Total amenazas ',
             mitigated: 'Total amenazas mitigadas',
             notMitigated: 'No Mitigadas',
+            openCritical: 'Abierto / Crítica Prioridad',
             openHigh: 'Abierto / Alta Prioridad',
             openMedium: 'Abierto / Prioridad Media',
             openLow: 'Abierto / Baja Prioridad',
+            openTba: 'Abierto / Por confirmar Prioridad',
             openUnknown: 'Abierto / Prioridad Desconocida'
         }
     },

@@ -4,14 +4,14 @@ const actor = {
     description: '',
     outOfScope: false,
     reasonOutOfScope: '',
-    providesAuthentication: false,
     hasOpenThreats: false,
+    providesAuthentication: false,
     threats: []
 };
 
 const boundary = {
     type: 'tm.Boundary',
-    name: '',
+    name: 'Trust Boundary',
     description: '',
     isTrustBoundary: true
 };
@@ -29,10 +29,11 @@ const flow = {
     description: '',
     outOfScope: false,
     reasonOutOfScope: '',
-    protocol: '',
+    hasOpenThreats: false,
+    isBidirectional: false,
     isEncrypted: false,
     isPublicNetwork: false,
-    hasOpenThreats: false,
+    protocol: '',
     threats: []
 };
 
@@ -42,8 +43,11 @@ const tmProcess = {
     description: '',
     outOfScope: false,
     reasonOutOfScope: '',
-    privilegeLevel: '',
     hasOpenThreats: false,
+    handlesCardPayment: false,
+    handlesGoodsOrServices: false,
+    isWebApplication: false,
+    privilegeLevel: '',
     threats: []
 };
 
@@ -53,17 +57,18 @@ const store = {
     description: '',
     outOfScope: false,
     reasonOutOfScope: '',
+    hasOpenThreats: false,
     isALog: false,
-    storesCredentials: false,
     isEncrypted: false,
     isSigned: false,
-    hasOpenThreats: false,
+    storesCredentials: false,
+    storesInventory: false,
     threats: []
 };
 
 const text = {
     type: 'tm.Text',
-    name: 'Arbitrary Text'
+    name: 'Descriptive text'
 };
 
 const propsByType = {

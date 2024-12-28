@@ -1,16 +1,16 @@
 <template>    
     <b-col lg>
+    <router-link :to="to" class="action-pane-link">
         <b-jumbotron class="text-center action-pane">
-            <router-link :to="to">
                 <font-awesome-icon
                 :icon="[iconPreface, icon]"
-                size="3x"
+                size="4x"
                 class="action-icon"
                 ></font-awesome-icon>
-            </router-link>
             <br />
             {{ $t(`dashboard.actions.${description}`) }}
         </b-jumbotron>
+            </router-link>
     </b-col>
 </template>
 
@@ -23,6 +23,12 @@
 .action-pane {
     min-height: 100%;
     margin-bottom: 0px;
+}
+.action-pane:hover{
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.action-pane-link:hover {
+    text-decoration: none;
 }
 </style>
 

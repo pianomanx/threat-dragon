@@ -4,7 +4,8 @@ const eng = {
     },
     nav: {
         v2Warning: 'Version 2.0 threat models are not backwardly compatible with version 1.x Threat Dragon models. Imported version 1.x models will be upgraded to the version 2.0 schema',
-        loggedInAs: 'Logged in as'
+        loggedInAs: 'Logged in as',
+        logOut: 'Log out'
     },
     home: {
         title: 'OWASP Threat Dragon',
@@ -18,6 +19,18 @@ const eng = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'Login with'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'Login with'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'Login with'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'Login with'
         },
         local: {
@@ -43,9 +56,12 @@ const eng = {
     desktop: {
         file: {
             heading: 'File',
+            clearRecentDocs: 'Clear Menu',
             close: 'Close Model',
+            closeWindow: 'Close Window',
             new: 'New Model',
             open: 'Open Model',
+            recentDocs: 'Open Recent',
             save: 'Save Model',
             saveAs: 'Save Model As'
         },
@@ -68,6 +84,11 @@ const eng = {
         select: 'Select a branch from',
         from: 'from the list below or',
         chooseRepo: 'choose another repo'
+    },
+    folder: {
+        select: 'Select a',
+        from: 'folder from the list below',
+        noneFound: 'This folder is empty, You can create a new threat model here.'
     },
     threatmodelSelect: {
         select: 'Select a Threat Model from',
@@ -105,6 +126,16 @@ const eng = {
                 defaultDescription: 'New LINDDUN diagram description',
                 select: 'LINDDUN'
             },
+            plot4ai: {
+                defaultTitle: 'New PLOT4ai diagram',
+                defaultDescription: 'New PLOT4ai diagram description',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'New DIE diagram',
+                defaultDescription: 'New DIE diagram description',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'New CIA diagram',
                 defaultDescription: 'New CIA diagram description',
@@ -128,15 +159,20 @@ const eng = {
             text: 'Text',
             description: 'Description',
             outOfScope: 'Out of Scope',
+            bidirection: 'Bidirectional',
             reasonOutOfScope: 'Reason for out of scope',
-            privilegeLevel: 'Privilege Level',
+            handlesCardPayment: 'Card payment',
+            handlesGoodsOrServices: 'Goods or Services',
             isALog: 'Is a Log',
-            storesCredentials: 'Stores Credentials',
             isEncrypted: 'Encrypted',
             isSigned: 'Signed',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'Privilege Level',
             providesAuthentication: 'Provides Authentication',
             protocol: 'Protocol',
-            publicNetwork: 'Public Network'
+            publicNetwork: 'Public Network',
+            storesCredentials: 'Stores Credentials',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'Delete selected',
@@ -180,6 +216,10 @@ const eng = {
             zoom: {
                 shortcut: '(ctrl/cmd) + mousewheel',
                 action: 'Zoom'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -209,6 +249,11 @@ const eng = {
         discardTitle: 'Discard Changes?',
         discardMessage: 'Are you sure you want to discard your changes?',
         edit: 'Edit',
+        exportAs: 'Export Model As',
+        exportHtml: 'HTML Report',
+        exportPdf: 'PDF Report',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'Import',
         ok: 'OK',
         open: 'Open',
@@ -219,11 +264,11 @@ const eng = {
         report: 'Report',
         save: 'Save',
         saveAs: 'Save As',
-        saveHtml: 'Save HTML',
         saveModel: 'Save Model',
         saveModelAs: 'Save Model As',
-        savePdf: 'Save PDF',
-        search: 'Search'
+        search: 'Search',
+        next:'Next',
+        previous:'Previous'
     },
     threats: {
         model: {
@@ -233,6 +278,12 @@ const eng = {
                 integrity: 'Integrity',
                 availability: 'Availability'
             },
+            die: {
+                header: '--- DIE ---',
+                distributed: 'Distributed',
+                immutable: 'Immutable',
+                ephemeral: 'Ephemeral'
+            },
             linddun: {
                 header: '--- LINDDUN ---',
                 linkability: 'Linkability',
@@ -241,6 +292,17 @@ const eng = {
                 detectability: 'Detectability',
                 disclosureOfInformation: 'Disclosure of information',
                 unawareness: 'Unawareness',
+                nonCompliance: 'Non-compliance'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'Technique & Processes',
+                accessibility: 'Accessibility',
+                identifiabilityLinkability: 'Identifiability & Linkability',
+                security: 'Security',
+                safety: 'Safety',
+                unawareness: 'Unawareness',
+                ethicsHumanRights: 'Ethics & Human Rights',
                 nonCompliance: 'Non-compliance'
             },
             stride: {
@@ -256,7 +318,9 @@ const eng = {
         generic: {
             default: 'New generic threat',
             cia: 'New CIA threat',
+            die: 'New DIE threat',
             linddun: 'New LINDDUN threat',
+            plot4ai: 'New PLOT4ai threat',
             stride: 'New STRIDE threat'
         },
         edit: 'Edit Threat',
@@ -285,9 +349,11 @@ const eng = {
             mitigated: 'Mitigated'
         },
         priority: {
+            tba: 'TBA',
             low: 'Low',
             medium: 'Medium',
-            high: 'High'
+            high: 'High',
+            critical: 'Critical'
         }
     },
     report: {
@@ -296,6 +362,7 @@ const eng = {
             showMitigatedThreats: 'Show mitigated threats',
             showModelDiagrams: 'Show model diagrams',
             showEmpty: 'Show empty elements',
+            showProperties: 'Show element properties',
             showBranding: 'Threat Dragon logo'
         },
         title: 'Threat model report for',
@@ -307,9 +374,11 @@ const eng = {
             total: 'Total Threats',
             mitigated: 'Total Mitigated',
             notMitigated: 'Not Mitigated',
+            openCritical: 'Open / Critical Priority',
             openHigh: 'Open / High Priority',
             openMedium: 'Open / Medium Priority',
             openLow: 'Open / Low Priority',
+            openTba: 'Open / TBA Priority',
             openUnknown: 'Open / Unknown Priority'
         }
     },

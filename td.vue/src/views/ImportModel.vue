@@ -58,14 +58,20 @@ import { mapState } from 'vuex';
 
 import isElectron from 'is-electron';
 import { getProviderType } from '@/service/provider/providers.js';
+import openThreatModel from '@/service/otm/openThreatModel.js';
 import TdFormButton from '@/components/FormButton.vue';
 import tmActions from '@/store/actions/threatmodel.js';
-import { THREATMODEL_UPDATE } from '@/store/actions/threatmodel.js';
+import { isValidSchema } from '@/service/schema/ajv';
 
 // only search for text files
 const pickerFileOptions = {
     types: [
-        { description: 'Threat models', accept: { 'text/*': ['.json'] } }
+        {
+            description: 'Threat models',
+            accept: {
+                'application/json': ['.json']
+            }
+        }
     ],
     multiple: false
 };
@@ -94,7 +100,7 @@ export default {
                     file.text()
                         .then(text => {
                             this.tmJson = text;
-                            this.$store.dispatch(THREATMODEL_UPDATE, { fileName: file.name });
+                            this.$store.dispatch(tmActions.update, { fileName: file.name });
                             this.onImportClick(file.name);
                         })
                         .catch(e => this.$toast.error(e));
@@ -113,7 +119,7 @@ export default {
                     let file = await handle.getFile();
                     if (file.name.endsWith('.json')) {
                         this.tmJson = await file.text();
-                        this.$store.dispatch(THREATMODEL_UPDATE, { fileName: file.name });
+                        this.$store.dispatch(tmActions.update, { fileName: file.name });
                         this.onImportClick(file.name);
                     } else {
                         this.$toast.error(this.$t('threatmodel.errors.onlyJsonAllowed'));
@@ -138,18 +144,26 @@ export default {
                 return;
             }
 
-            // ToDo: need to catch invalid threat model schemas, possibly using npmjs.com/package/ajv
+            // check for schema errors
+            if(!isValidSchema(jsonModel)){
+                this.$toast.warning(this.$t('threatmodel.errors.invalidJson'));
+            }
+
+            // Identify if threat model is in OTM format and if so, convert OTM to dragon format
+            if (Object.hasOwn(jsonModel, 'otmVersion')) {
+                jsonModel = openThreatModel.convertOTMtoTD(jsonModel);
+            }
+
+            // save the threat model in the store
+            this.$store.dispatch(tmActions.selected, jsonModel);
 
             if (isElectron()) {
                 // tell the desktop server that the model has changed
                 window.electronAPI.modelOpened(fileName);
             }
 
-            // save the threat model in the store
-            this.$store.dispatch(tmActions.selected, jsonModel);
-
             let params;
-            // this will fail if the threat model does not have a title in the summary
+            // this will deliberately fail if the threat model does not have a title in the summary
             try {
                 params = Object.assign({}, this.$route.params, {
                     threatmodel: jsonModel.summary.title

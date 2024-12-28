@@ -4,7 +4,8 @@ const fra = {
     },
     nav: {
         v2Warning: 'Version 2.0 threat models are not backwardly compatible with version 1.x Threat Dragon models. Imported version 1.x models will be upgraded to the version 2.0 schema',
-        loggedInAs: 'Connecté en tant que'
+        loggedInAs: 'Connecté en tant que',
+        logOut: 'Log out'
     },
     home: {
         title: 'OWASP Threat Dragon',
@@ -18,6 +19,18 @@ const fra = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'Se connecter avec'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'Se connecter avec'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'Se connecter avec'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'Se connecter avec'
         },
         local: {
@@ -43,9 +56,12 @@ const fra = {
     desktop: {
         file: {
             heading: 'File',
+            clearRecentDocs: 'Clear Menu',
             close: 'Fermer Projet',
+            closeWindow: 'Close Window',
             new: 'New Model',
             open: 'Ouvrir',
+            recentDocs: 'Open Recent',
             save: 'Sauvegarder',
             saveAs: 'Sauvergarder en tant que'
         },
@@ -105,6 +121,16 @@ const fra = {
                 defaultDescription: 'New LINDDUN diagram description',
                 select: 'LINDDUN'
             },
+            plot4ai: {
+                defaultTitle: 'Nouveau diagramme PLOT4ai',
+                defaultDescription: 'New PLOT4ai diagram description',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'New DIE diagram',
+                defaultDescription: 'New DIE diagram description',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'Nouveau diagramme CIA',
                 defaultDescription: 'New CIA diagram description',
@@ -128,15 +154,20 @@ const fra = {
             text: 'Texte',
             description: 'Description',
             outOfScope: 'Hors du domaine visé',
+            bidirection: 'Bidirectional',
             reasonOutOfScope: 'Raison de l\'exclusion du domaine visé',
-            privilegeLevel: 'Niveau de privilège',
+            handlesCardPayment: 'Card payment',
+            handlesGoodsOrServices: 'Goods or Services',
             isALog: 'Est un journal',
-            storesCredentials: 'Conserve les informations d\'identification',
             isEncrypted: 'Encrypté',
             isSigned: 'Signé',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'Niveau de privilège',
             providesAuthentication: 'Fournit de l\'authentification',
             protocol: 'Protocole',
-            publicNetwork: 'Réseau public'
+            publicNetwork: 'Réseau public',
+            storesCredentials: 'Conserve les informations d\'identification',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'Supprimer la sélection',
@@ -180,6 +211,10 @@ const fra = {
             zoom: {
                 shortcut: '(ctrl/cmd) + molette de souris',
                 action: 'Agrandir'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -209,6 +244,11 @@ const fra = {
         discardTitle: 'Annuler les modifications?',
         discardMessage: 'Êtes-vous sûr de vouloir abandonner vos modifications?',
         edit: 'Modifier',
+        exportAs: 'Export Model As',
+        exportHtml: 'Rapport HTML',
+        exportPdf: 'Rapport PDF',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'Importer',
         ok: 'OK',
         open: 'Ouvrir',
@@ -219,11 +259,11 @@ const fra = {
         report: 'Rapport',
         save: 'Sauvegarder',
         saveAs: 'Sauvergarder en tant que',
-        saveHtml: 'Sauvergarder le HTML',
         saveModel: 'Sauvergarder le modèle',
         saveModelAs: 'Sauvergarder le modèle en tant que',
-        savePdf: 'Sauvergarder le PDF',
-        search: 'Rechercher'
+        search: 'Rechercher',
+        next: 'suivant',
+        previous: 'précédent'
     },
     threats: {
         model: {
@@ -232,6 +272,12 @@ const fra = {
                 confidentiality: 'Confidentialité',
                 integrity: 'Intégrité',
                 availability: 'Disponibilité'
+            },
+            die: {
+                header: '--- DIE ---',
+                distributed: 'Distributed',
+                immutable: 'Immutable',
+                ephemeral: 'Ephemeral'
             },
             linddun: {
                 header: '--- LINDDUN ---',
@@ -242,6 +288,17 @@ const fra = {
                 disclosureOfInformation: 'Divulgation d\'information',
                 unawareness: 'Inconscience',
                 nonCompliance: 'Non-conformité'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'Technique & Processes',
+                accessibility: 'Accessibility',
+                identifiabilityLinkability: 'Identifiability & Linkability',
+                security: 'Security',
+                safety: 'Safety',
+                unawareness: 'Unawareness',
+                ethicsHumanRights: 'Ethics & Human Rights',
+                nonCompliance: 'Non-compliance'
             },
             stride: {
                 header: '--- STRIDE ---',
@@ -256,7 +313,9 @@ const fra = {
         generic: {
             default: 'Nouvelle menace générique',
             cia: 'Nouvelle menace CIA',
+            die: 'Nouvelle menace DIE',
             linddun: 'Nouvelle menace LINDDUN',
+            plot4ai: 'Nouvelle menace PLOT4ai',
             stride: 'Nouvelle menace STRIDE'
         },
         edit: 'Modifier la menace',
@@ -285,9 +344,11 @@ const fra = {
             mitigated: 'Mitigé'
         },
         priority: {
+            tba: 'à venir',
             low: 'Faible',
             medium: 'Moyen',
-            high: 'Élevé'
+            high: 'Élevé',
+            critical: 'Critique'
         }
     },
     report: {
@@ -296,6 +357,7 @@ const fra = {
             showMitigatedThreats: 'Afficher les menaces mitigées',
             showModelDiagrams: 'Afficher les diagrammes du modèle',
             showEmpty: 'Show empty elements',
+            showProperties: 'Show element properties',
             showBranding: 'Icône de Threat Dragon'
         },
         title: 'Rapport sur le modèle de menace pour',
@@ -307,9 +369,11 @@ const fra = {
             total: 'Menaces Totales',
             mitigated: 'Menaces Totales Mitigées',
             notMitigated: 'Menaces Totales Non-Mitigées',
+            openCritical:'Ouvert / Critique Priorité',
             openHigh: 'Ouvert / Haute Priorité',
             openMedium: 'Ouvert / Moyenne Priorité',
             openLow: 'Ouvert / Faible Priorité',
+            openTba: 'Ouvert / Priorité à déterminer',
             openUnknown: 'Ouvert / Priorité Inconnue'
         }
     },

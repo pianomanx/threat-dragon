@@ -32,12 +32,12 @@ export default {
                             },
                             'topLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             },
                             'bottomLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             }
                         },
@@ -85,12 +85,12 @@ export default {
                             },
                             'topLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             },
                             'bottomLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             }
                         },
@@ -118,7 +118,7 @@ export default {
                                 {
                                     'status': 'Open',
                                     'severity': 'Medium',
-                                    'description': 'An attacker could obtain the DB credentials ans use them to make unauthorised queries.',
+                                    'description': 'An attacker could obtain the DB credentials and use them to make unauthorised queries.',
                                     'title': 'Credential theft',
                                     'type': 'Information disclosure',
                                     'mitigation': 'Use a firewall to restrict access to the DB to only the Background Worker IP address.',
@@ -148,13 +148,13 @@ export default {
                             },
                             'topLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
-                                'strokeDasharray': null
+                                'strokeWidth': 2.5,
+                                'strokeDasharray': '4 3'
                             },
                             'bottomLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
-                                'strokeDasharray': null
+                                'strokeWidth': 2.5,
+                                'strokeDasharray': '4 3'
                             }
                         },
                         'shape': 'store',
@@ -173,7 +173,7 @@ export default {
                                     'severity': 'High',
                                     'title': 'Credentials should be encrypted',
                                     'type': 'Information disclosure',
-                                    'description': 'The Web Application Config stores credentials used  by the Web App to access the message queue. These could be stolen by an attacker and used to read confidential data or place poison message on the queue.',
+                                    'description': 'The Web Application Config stores credentials used by the Web App to access the message queue. These could be stolen by an attacker and used to read confidential data or place poison message on the queue.',
                                     'mitigation': 'The Message Queue credentials should be encrypted.',
                                     'modelType': 'STRIDE',
                                     'id': 'aaea0238-2984-4b25-8268-3798e63bed34'
@@ -201,12 +201,12 @@ export default {
                             },
                             'topLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             },
                             'bottomLine': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             }
                         },
@@ -274,7 +274,7 @@ export default {
                             },
                             'body': {
                                 'stroke': 'red',
-                                'strokeWidth': 3,
+                                'strokeWidth': 2.5,
                                 'strokeDasharray': null
                             }
                         },
@@ -381,7 +381,7 @@ export default {
                         }
                     },
                     {
-                        'shape': 'trust-broundary-curve',
+                        'shape': 'trust-boundary-curve',
                         'attrs': {
                             'line': {
                                 'targetMarker': '',
@@ -425,7 +425,7 @@ export default {
                         ]
                     },
                     {
-                        'shape': 'trust-broundary-curve',
+                        'shape': 'trust-boundary-curve',
                         'attrs': {
                             'line': {
                                 'targetMarker': '',
@@ -479,7 +479,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -542,7 +542,7 @@ export default {
                             'line': {
                                 'stroke': 'red',
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -605,7 +605,7 @@ export default {
                             'line': {
                                 'stroke': 'red',
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -668,7 +668,7 @@ export default {
                             'line': {
                                 'stroke': 'red',
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -726,7 +726,7 @@ export default {
                         ]
                     },
                     {
-                        'shape': 'trust-broundary-curve',
+                        'shape': 'trust-boundary-curve',
                         'attrs': {
                             'line': {
                                 'targetMarker': '',
@@ -784,7 +784,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -848,7 +848,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': '2 2'
                             }
@@ -901,7 +901,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': '2 2'
                             }
@@ -954,7 +954,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -1007,7 +1007,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -1060,7 +1060,7 @@ export default {
                                 'stroke': '#333333',
                                 'strokeWidth': 1,
                                 'targetMarker': {
-                                    'name': 'classic'
+                                    'name': 'block'
                                 },
                                 'strokeDasharray': null
                             }
@@ -1109,7 +1109,7 @@ export default {
                 ],
                 'version': '2.0',
                 'title': 'Main Request Data Flow',
-                'descrition': 'Main Request Data Flow Description',
+                'description': '',
                 'thumbnail': './public/content/images/thumbnail.stride.jpg',
                 'diagramType': 'STRIDE',
                 'id': 0
