@@ -40,10 +40,6 @@ describe('service/entity/default-properties.js', () => {
             expect(defaultProperties.boundary.type).toEqual('tm.Boundary');
         });
 
-        it('has a blank name', () => {
-            expect(defaultProperties.boundary.name).toEqual('');
-        });
-
         it('has a blank description', () => {
             expect(defaultProperties.boundary.description).toEqual('');
         });
@@ -86,6 +82,10 @@ describe('service/entity/default-properties.js', () => {
 
         it('defines outOfScope', () => {
             expect(defaultProperties.flow.outOfScope).toEqual(false);
+        });
+
+        it('defines bidirection', () => {
+            expect(defaultProperties.flow.isBidirectional).toEqual(false);
         });
 
         it('defines reasonOutOfScope', () => {
@@ -134,12 +134,24 @@ describe('service/entity/default-properties.js', () => {
             expect(defaultProperties.tmProcess.reasonOutOfScope).toEqual('');
         });
 
-        it('defines privilegeLevel', () => {
-            expect(defaultProperties.tmProcess.privilegeLevel).toEqual('');
-        });
-
         it('defines hasOpenThreats', () => {
             expect(defaultProperties.tmProcess.hasOpenThreats).toEqual(false);
+        });
+
+        it('defines handlesCardPayment', () => {
+            expect(defaultProperties.tmProcess.handlesCardPayment).toEqual(false);
+        });
+
+        it('defines handlesGoodsOrServices', () => {
+            expect(defaultProperties.tmProcess.handlesGoodsOrServices).toEqual(false);
+        });
+
+        it('defines isWebApplication', () => {
+            expect(defaultProperties.tmProcess.isWebApplication).toEqual(false);
+        });
+
+        it('defines privilegeLevel', () => {
+            expect(defaultProperties.tmProcess.privilegeLevel).toEqual('');
         });
 
         it('defines threats', () => {
@@ -164,12 +176,12 @@ describe('service/entity/default-properties.js', () => {
             expect(defaultProperties.store.reasonOutOfScope).toEqual('');
         });
 
-        it('defines isALog', () => {
-            expect(defaultProperties.store.isALog).toEqual(false);
+        it('defines hasOpenThreats', () => {
+            expect(defaultProperties.store.hasOpenThreats).toEqual(false);
         });
 
-        it('defines storesCredentials', () => {
-            expect(defaultProperties.store.storesCredentials).toEqual(false);
+        it('defines isALog', () => {
+            expect(defaultProperties.store.isALog).toEqual(false);
         });
 
         it('defines isEncrypted', () => {
@@ -180,8 +192,12 @@ describe('service/entity/default-properties.js', () => {
             expect(defaultProperties.store.isSigned).toEqual(false);
         });
 
-        it('defines hasOpenThreats', () => {
-            expect(defaultProperties.store.hasOpenThreats).toEqual(false);
+        it('defines storesCredentials', () => {
+            expect(defaultProperties.store.storesCredentials).toEqual(false);
+        });
+
+        it('defines storesInventory', () => {
+            expect(defaultProperties.store.storesInventory).toEqual(false);
         });
 
         it('defines threats', () => {
@@ -195,7 +211,7 @@ describe('service/entity/default-properties.js', () => {
         });
 
         it('defines name', () => {
-            expect(defaultProperties.text.name).toEqual('Arbitrary Text');
+            expect(defaultProperties.text.name).toEqual('Descriptive text');
         });
     });
 

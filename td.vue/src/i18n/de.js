@@ -4,7 +4,8 @@ const deu = {
     },
     nav: {
         v2Warning: 'Version 2.0 Bedrohungsmodelle sind nicht Abwärtskompatibel mit Version 1.x Threat Dragon Modellen. Importierte Version 1.x Modelle werden auf das Version 2.0 Schema gehoben', //in line with wording of BSI Leitfaden zur Entwicklung sicherer Webanwendungen
-        loggedInAs: 'Angemeldet als'
+        loggedInAs: 'Angemeldet als',
+        logOut: 'Log out'
     },
     home: {
         title: 'OWASP Threat Dragon',
@@ -18,6 +19,18 @@ const deu = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'Anmelden mit'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'Anmelden mit'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'Anmelden mit'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'Anmelden mit'
         },
         local: {
@@ -43,9 +56,12 @@ const deu = {
     desktop: {
         file: {
             heading: 'Datei',
+            clearRecentDocs: 'Clear Menu',
             close: 'Modell schließen',
+            closeWindow: 'Close Window',
             new: 'Neues Modell',
             open: 'Modell öffnen',
+            recentDocs: 'Open Recent',
             save: 'Modell speichern',
             saveAs: 'Modell speichern als'
         },
@@ -67,7 +83,16 @@ const deu = {
     branch: {
         select: 'Wähle einen Branch aus', //in line with Github wording https://docs.github.com/de/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository
         from: 'aus folgender Liste aus',
-        chooseRepo: 'ein anderes Repository auswählen'
+        chooseRepo: 'ein anderes Repository auswählen',
+        or: 'oder',
+        addNew: 'füge einen neuen Branch hinzu',
+        protectedBranch: 'Geschützter Branch',
+        nameRequired: 'Branch Name ist erforderlich',
+        nameExists: 'Branch Name existiert bereits',
+        refBranch: 'Referenz Branch',
+        add: 'Branch hinzufügen',
+        cancel: 'Abbrechen',
+        name: 'Branch Name'
     },
     threatmodelSelect: {
         select: 'Ein Bedrohungsmodell auswählen aus',
@@ -105,6 +130,16 @@ const deu = {
                 defaultDescription: 'Neue LINDDUN Diagramm Beschreibung',
                 select: 'LINDDUN'
             },
+            plot4ai: {
+                defaultTitle: 'Neues PLOT4ai Diagramm',
+                defaultDescription: 'Neue PLOT4ai Diagramm Beschreibung',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'New DIE diagram',
+                defaultDescription: 'Neue DIE Diagramm Beschreibung',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'Neues CIA Diagramm',
                 defaultDescription: 'Neue CIA Diagramm Beschreibung',
@@ -128,15 +163,20 @@ const deu = {
             text: 'Text',
             description: 'Beschreibung',
             outOfScope: 'Nicht im Geltungsbereich',
+            bidirection: 'Bidirectional',
             reasonOutOfScope: 'Begründung für nicht im Geltungsbereich',
-            privilegeLevel: 'Privilegstufe',
+            handlesCardPayment: 'Card payment',
+            handlesGoodsOrServices: 'Goods or Services',
             isALog: 'Ist ein Log',
-            storesCredentials: 'Speichert Zugangsinformationen',
             isEncrypted: 'Verschlüsselt',
             isSigned: 'Signiert',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'Privilegstufe',
             providesAuthentication: 'Stellt Authentifizierung bereit',
             protocol: 'Protokoll',
-            publicNetwork: 'Öffentliches Netzwerk'
+            publicNetwork: 'Öffentliches Netzwerk',
+            storesCredentials: 'Speichert Zugangsinformationen',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'Auswahl löschen',
@@ -180,6 +220,10 @@ const deu = {
             zoom: {
                 shortcut: '(Strg/cmd) + Mausrad',
                 action: 'Zoomen'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -209,6 +253,11 @@ const deu = {
         discardTitle: 'Änderung verwerfen?',
         discardMessage: 'Sind Sie sicher, dass Sie Ihre Änderungen verwerfen wollen?',
         edit: 'Editieren',
+        exportAs: 'Export Model As',
+        exportHtml: 'Speichern als HTML',
+        exportPdf: 'Speichern als PDF',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'Importieren',
         ok: 'OK',
         open: 'Öffnen',
@@ -219,11 +268,11 @@ const deu = {
         report: 'Bericht',
         save: 'Speichern',
         saveAs: 'Speichern als',
-        saveHtml: 'Speichern als HTML',
         saveModel: 'Modell speichern',
         saveModelAs: 'Modell speichern als',
-        savePdf: 'Speichern als PDF',
-        search: 'Suchen'
+        search: 'Suchen',
+        next: 'nächste',
+        previous: 'vorherige'
     },
     threats: {
         model: {
@@ -233,7 +282,13 @@ const deu = {
                 integrity: 'Integrität',
                 availability: 'Verfügbarkeit'
             },
-            linddun: { //unable to find german sources to Linddun. The official website is also not available on german. will leave the specific terms as in the original 
+            die: {
+                header: '--- DIE ---',
+                distributed: 'Distributed',
+                immutable: 'Immutable',
+                ephemeral: 'Ephemeral'
+            },
+            linddun: { //unable to find german sources to Linddun. The official website is also not available on german. will leave the specific terms as in the original
                 header: '--- LINDDUN ---',
                 linkability: 'Linkability',
                 identifiability: 'Identifiability',
@@ -241,6 +296,17 @@ const deu = {
                 detectability: 'Detectability',
                 disclosureOfInformation: 'Disclosure of information',
                 unawareness: 'Unawareness',
+                nonCompliance: 'Non-compliance'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'Technique & Processes',
+                accessibility: 'Accessibility',
+                identifiabilityLinkability: 'Identifiability & Linkability',
+                security: 'Security',
+                safety: 'Safety',
+                unawareness: 'Unawareness',
+                ethicsHumanRights: 'Ethics & Human Rights',
                 nonCompliance: 'Non-compliance'
             },
             stride: {
@@ -256,7 +322,9 @@ const deu = {
         generic: {
             default: 'Neue generische Bedrohung',
             cia: 'Neue CIA Bedrohung',
+            die: 'Neue DIE Bedrohung',
             linddun: 'Neue LINDDUN Bedrohung',
+            plot4ai: 'Neue PLOT4ai Bedrohung',
             stride: 'Neue STRIDE Bedrohung'
         },
         edit: 'Bedrohung bearbeiten',
@@ -285,9 +353,11 @@ const deu = {
             mitigated: 'Abgeschwächt'
         },
         priority: {
+            tba: '',
             low: 'Niedrig',
             medium: 'Mittel',
-            high: 'Hoch'
+            high: 'Hoch',
+            critical: 'Kritisch'
         }
     },
     report: {
@@ -296,6 +366,7 @@ const deu = {
             showMitigatedThreats: 'Abgeschwächte Bedrohungen anzeigen',
             showModelDiagrams: 'Modell Diagramme anzeigen',
             showEmpty: 'Leere Elemente anzeigen',
+            showProperties: 'Show element properties',
             showBranding: 'Threat Dragon Logo'
         },
         title: 'Bedrohungsmodell Bereicht für',
@@ -307,9 +378,11 @@ const deu = {
             total: 'Bedrohungen insgesamt',
             mitigated: 'Bedrohungen abgeschwächt',
             notMitigated: 'Nicht abgeschwächt',
+            openCritical: 'Offen / Kritische Priorität',
             openHigh: 'Offen / Hohe Priorität',
             openMedium: 'Offen / Mittlere Priorität',
             openLow: 'Offen / Niedrige Priorität',
+            openTba: 'Offen / TBA-Priorität',
             openUnknown: 'Offen / Unbekannte Priorität'
         }
     },

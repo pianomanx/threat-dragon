@@ -19,11 +19,13 @@ protocol.registerSchemesAsPrivileged([
     { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
 
+let runApp = true;
 async function createWindow () {
+
     // Create the browser window
     const mainWindow = new BrowserWindow({
         width: 1400,
-        height: 900,
+        height: 1000,
         show: false,
         webPreferences: {
             enableRemoteModule: false,
@@ -41,11 +43,20 @@ async function createWindow () {
         menu.setMainWindow(mainWindow);
     });
 
+    mainWindow.on('close', (event) => {
+        if (runApp) {
+            event.preventDefault();
+            mainWindow.webContents.send('close-app-request');
+        }
+    });
+
     if (electronURL) {
         logger.log.info('Running in development mode with WEBPACK_DEV_SERVER_URL: ' + electronURL);
         // Load the url of the dev server when in development mode
         await mainWindow.loadURL(electronURL);
-        if (!isTest) mainWindow.webContents.openDevTools();
+        if (!isTest) {
+            mainWindow.webContents.openDevTools();
+        }
     } else {
         createProtocol('app');
         // Load the index.html when not in development mode
@@ -91,31 +102,35 @@ app.on('ready', async () => {
         }
     }
 
-    ipcMain.on('update-menu', handleUpdateMenu);
+    ipcMain.on('close-app', handleCloseApp);
     ipcMain.on('model-closed', handleModelClosed);
+    ipcMain.on('model-open-confirmed', handleModelOpenConfirmed);
     ipcMain.on('model-opened', handleModelOpened);
     ipcMain.on('model-print', handleModelPrint);
-    ipcMain.on('model-saved', handleModelSaved);
+    ipcMain.on('model-save', handleModelSave);
+    ipcMain.on('update-menu', handleUpdateMenu);
 
     createWindow();
 
     // check for updates from github releases site
+    autoUpdater.autoInstallOnAppQuit = true;
+    // require user to agree to download
+    autoUpdater.autoDownload = false;
     autoUpdater.checkForUpdatesAndNotify();
 });
 
 // this is emitted when a 'recent document' is opened
 app.on('open-file', function(event, path) {
-    // handle this event
+    // apply custom handler to this event
     event.preventDefault();
-    logger.log.debug('Open file from recent documents: ' + path);
-    menu.readModelData(path);
+    logger.log.debug('Request to open file from recent documents: ' + path);
+    menu.openModelRequest(path);
 });
 
-function handleUpdateMenu (_event, locale) {
-    logger.log.debug('Re-labeling the menu system for: ' + locale);
-    menu.setLocale(locale);
-    let template = menu.getMenuTemplate();
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+function handleCloseApp() {
+    logger.log.debug('Close application request from renderer ');
+    runApp = false;
+    app.quit();
 }
 
 function handleModelClosed (_event, fileName) {
@@ -123,19 +138,31 @@ function handleModelClosed (_event, fileName) {
     menu.modelClosed();
 }
 
+function handleModelOpenConfirmed (_event, fileName) {
+    logger.log.debug('Open model confirmation from renderer for file name: ' + fileName);
+    menu.openModel(fileName);
+}
+
 function handleModelOpened (_event, fileName) {
     logger.log.debug('Open model notification from renderer for file name: ' + fileName);
     menu.modelOpened();
 }
 
-function handleModelPrint (_event, printer) {
-    logger.log.debug('Model print request from renderer with printer : ' + printer);
-    menu.modelPrint(printer);
+function handleModelPrint (_event, format) {
+    logger.log.debug('Model print request from renderer with printer : ' + format);
+    menu.modelPrint(format);
 }
 
-function handleModelSaved (_event, modelData, fileName) {
+function handleModelSave (_event, modelData, fileName) {
     logger.log.debug('Model save request from renderer with file name : ' + fileName);
-    menu.modelSaved(modelData, fileName);
+    menu.modelSave(modelData, fileName);
+}
+
+function handleUpdateMenu (_event, locale) {
+    logger.log.debug('Re-labeling the menu system for: ' + locale);
+    menu.setLocale(locale);
+    let template = menu.getMenuTemplate();
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 // Exit cleanly on request from parent process in development mode.

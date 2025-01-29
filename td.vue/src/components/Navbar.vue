@@ -19,6 +19,7 @@
           <font-awesome-icon
             icon="sign-out-alt"
             class="td-fa-nav"
+            v-b-tooltip.hover :title="$t('nav.logOut')"
           ></font-awesome-icon>
         </b-nav-item>
         <b-nav-item
@@ -30,6 +31,7 @@
           <font-awesome-icon
             icon="question-circle"
             class="td-fa-nav"
+            v-b-tooltip.hover :title="$t('desktop.help.docs')"
           ></font-awesome-icon>
         </b-nav-item>
         <b-nav-item
@@ -41,6 +43,7 @@
           <font-awesome-icon
             icon="gift"
             class="td-fa-nav"
+            v-b-tooltip.hover :title="$t('desktop.help.sheets')"
           ></font-awesome-icon>
         </b-nav-item>
         <b-nav-item
@@ -49,7 +52,7 @@
           rel="noopener noreferrer"
           id="nav-owasp-td"
         >
-          <b-img src="@/assets/owasp.svg" class="td-fa-nav td-owasp-logo" />
+          <b-img src="@/assets/owasp.svg" class="td-fa-nav td-owasp-logo" :title="$t('desktop.help.visit')"/>
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -87,6 +90,25 @@ $icon-height: 1.2rem;
     max-height: ($header-height - 10);
   }
 }
+
+@media (max-width: 576px) { /* This is the typical breakpoint for phones */
+  .nav-link {
+  color: red !important;
+  }
+  .logged-in-as {
+    background-color: $orange;
+    border-radius: 5px;
+    padding:10px;
+  }
+}
+@media (max-width: 576px) {
+  .td-owasp-logo { /* Target the OWASP logo */
+    background-color: red;
+    border-radius: 50%;
+    padding: 5px;
+  }
+  }
+
 </style>
 
 <script>

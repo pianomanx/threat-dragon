@@ -4,7 +4,8 @@ const hin = {
     },
     nav: {
         v2Warning: 'Version 2.0 threat models are not backwardly compatible with version 1.x Threat Dragon models. Imported version 1.x models will be upgraded to the version 2.0 schema',
-        loggedInAs: 'के रूप में लॉग इन किया'
+        loggedInAs: 'लॉग-इन किया गया है भूमिका में',
+        logOut: 'लॉगआउट'
     },
     home: {
         title: 'OWASP थ्रेट ड्रैगन',
@@ -18,6 +19,18 @@ const hin = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'से लोगिन करें'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'से लोगिन करें'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'से लोगिन करें'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'से लोगिन करें'
         },
         local: {
@@ -43,8 +56,12 @@ const hin = {
     desktop: {
         file: {
             heading: 'फ़ाइल',
+            clearRecentDocs: 'मेनू हटाएं',
             close: 'क्लोज मॉडल',
+            closeWindow: 'विंडो बंद करें',
+            new: 'नया मॉडल',
             open: 'ओपन मॉडल',
+            recentDocs: 'नवीनतम खोलें',
             save: 'मॉडल सहेजें',
             saveAs: 'मॉडल को इस रूप में सहेजें'
         },
@@ -66,7 +83,16 @@ const hin = {
     branch: {
         select: 'से एक शाखा का चयन करें',
         from: 'नीचे दी गई सूची से या',
-        chooseRepo: 'एक और रेपो चुनें'
+        chooseRepo: 'एक और रेपो चुनें',
+        or: 'या',
+        addNew: 'नई शाखा जोड़ें',
+        protectedBranch: 'संरक्षित शाखा',
+        nameRequired: 'एक नाम आवश्यक है',
+        nameExists: 'एक शाखा इस नाम से पहले ही मौजूद है',
+        refBranch: 'आधार शाखा',
+        add: 'शाखा जोडे',
+        cancel: 'रद्द करें',
+        name: 'शाखा का नाम',
     },
     threatmodelSelect: {
         select: 'से एक थ्रेट मॉडल का चयन करें',
@@ -104,6 +130,16 @@ const hin = {
                 defaultDescription: 'न्यू लिंडडन डायग्राम डिस्क्रिप्शन',
                 select: 'लिंडडन'
             },
+            plot4ai: {
+                defaultTitle: 'नया PLOT4ai आरेख',
+                defaultDescription: 'नया PLOT4ai आरेख विवरण',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'नया DIE आरेख',
+                defaultDescription: 'नया DIE आरेख विवरण',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'न्यू सीआईए डायग्राम',
                 defaultDescription: 'नई सीआईए डायग्राम डिस्क्रिप्शन',
@@ -127,15 +163,20 @@ const hin = {
             text: 'टेक्स्ट',
             description: 'विवरण',
             outOfScope: 'आउट ऑफ स्कोप',
+            bidirection: 'द्विदिशीय',
             reasonOutOfScope: 'दायरे से बाहर होने का कारण',
-            privilegeLevel: 'विशेषाधिकार स्तर',
+            handlesCardPayment: 'कार्ड भुगतान',
+            handlesGoodsOrServices: 'सामान या सेवाएँ',
             isALog: 'एक लॉग है',
-            storesCredentials: 'स्टोर क्रेडेंशियल',
             isEncrypted: 'एन्क्रिप्टेड',
             isSigned: 'हस्ताक्षरित',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'विशेषाधिकार स्तर',
             providesAuthentication: 'प्रमाणीकरण प्रदान करता है',
             protocol: 'प्रोटोकॉल',
-            publicNetwork: 'सार्वजनिक नेटवर्क'
+            publicNetwork: 'सार्वजनिक नेटवर्क',
+            storesCredentials: 'स्टोर क्रेडेंशियल',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'चयनित हटाएं',
@@ -179,6 +220,10 @@ const hin = {
             zoom: {
                 shortcut: '(ctrl/cmd) + mousewheel',
                 action: 'ज़ूम'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -208,6 +253,11 @@ const hin = {
         discardTitle: 'परिवर्तनों को त्यागें?',
         discardMessage: 'क्या आप सुनिश्चित हैं कि आप अपने परिवर्तनों को खारिज करना चाहते हैं?',
         edit: 'संपादित करें',
+        exportAs: 'मॉडल को निर्यात करें जैसे',
+        exportHtml: 'HTML रिपोर्टें',
+        exportPdf: 'पीडीएफ रिपोर्टें',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'आयात',
         ok: 'ठीक है',
         open: 'खुला',
@@ -218,11 +268,11 @@ const hin = {
         report: 'रिपोर्ट',
         save: 'सहेजें',
         saveAs: 'इस रूप में सहेजें',
-        saveHtml: 'HTML सेव करें',
         saveModel: 'मॉडल सेव करें',
         saveModelAs: 'मॉडल को इस रूप में सहेजें',
-        savePdf: 'पीडीएफ सेव करें',
-        search: 'खोज'
+        search: 'खोज',
+        next: 'अगला',
+        previous: 'पहले का'
     },
     threats: {
         model: {
@@ -231,6 +281,12 @@ const hin = {
                 confidentiality: 'गोपनीयता',
                 integrity: 'ईमानदारी',
                 availability: 'उपलब्धता'
+            },
+            die: {
+                header: '--- DIE ---',
+                distributed: 'वितरित',
+                immutable: 'अपरिवर्तनीय',
+                ephemeral: 'क्षणिक'
             },
             linddun: {
                 header: '--- लिंडडन ---',
@@ -241,6 +297,17 @@ const hin = {
                 disclosureOfInformation: 'सूचना का प्रकटीकरण',
                 unawareness: 'अनभिज्ञता',
                 nonCompliance: 'गैर-अनुपालन'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'तकनीक और प्रक्रियाएँ',
+                accessibility: 'सुलभता',
+                identifiabilityLinkability: 'पहचान योग्यता और संबंधनीयता',
+                security: 'सुरक्षा',
+                safety: 'सुरक्षा',
+                unawareness: 'अनजानी',
+                ethicsHumanRights: 'नैतिकता और मानवाधिकार',
+                nonCompliance: 'अनुपालन न करना'
             },
             stride: {
                 header: '--- स्ट्राइड ---',
@@ -255,7 +322,9 @@ const hin = {
         generic: {
             default: 'नया सामान्य थ्रेट',
             cia: 'नया सीआईए थ्रेट',
+            die: 'नया DIE थ्रेट',
             linddun: 'न्यू लिंडडन थ्रेट',
+            plot4ai: 'नया DPLOT4ai थ्रेट',
             stride: 'नया स्ट्राइड थ्रेट'
         },
         edit: 'थ्रेट संपादित करें',
@@ -284,9 +353,11 @@ const hin = {
             mitigated: 'शमन'
         },
         priority: {
+            tba: 'टीबीए',
             low: 'कम',
             medium: 'मध्यम',
-            high: 'ऊँचा'
+            high: 'ऊँचा',
+            critical: 'गंभीर'
         }
     },
     report: {
@@ -294,7 +365,8 @@ const hin = {
             showOutOfScope: 'दायरे से बाहर के तत्व दिखाएं',
             showMitigatedThreats: 'कम किए गए खतरे दिखाएं',
             showModelDiagrams: 'मॉडल आरेख दिखाएं',
-            showEmpty: 'Show empty elements',
+            showEmpty: 'खाली तत्व दिखाएं',
+            showProperties: 'Show element properties',
             showBranding: 'शो थ्रेट ड्रैगन ब्रांडिंग'
         },
         title: 'के लिए थ्रेट मॉडल रिपोर्ट',
@@ -306,9 +378,11 @@ const hin = {
             total: 'कुल खतरे',
             mitigated: 'कुल शमन',
             notMitigated: 'कम नहीं किया गया',
+            openCritical: 'ओपन / महत्वपूर्ण प्राथमिकता',
             openHigh: 'ओपन / हाई प्रायोरिटी',
             openMedium: 'ओपन / मीडियम प्रायोरिटी',
             openLow: 'ओपन / लो प्रायोरिटी',
+            openTba: 'ओपन / टीबीए प्राथमिकता',
             openUnknown: 'खुला / अज्ञात प्राथमिकता'
         }
     },

@@ -20,8 +20,8 @@ describe('service/threats/index.js', () => {
             expect(threat.status).toEqual('Open');
         });
 
-        it('has a medium severity', () => {
-            expect(threat.severity).toEqual('Medium');
+        it('has a TBA severity', () => {
+            expect(threat.severity).toEqual('TBA');
         });
 
         it('has a defined type', () => {
@@ -61,6 +61,26 @@ describe('service/threats/index.js', () => {
         });
     });
 
+    describe('create new PLOT4ai threat', () => {
+        let threat;
+
+        beforeEach(() => {
+            threat = createNewTypedThreat('PLOT4ai');
+        });
+
+        it('has a typed title', () => {
+            expect(threat.title).toEqual('New PLOT4ai threat');
+        });
+
+        it('has Technique & Processes type', () => {
+            expect(threat.type).toEqual('Technique & Processes');
+        });
+
+        it('has a PLOT4ai modelType', () => {
+            expect(threat.modelType).toEqual('PLOT4ai');
+        });
+    });
+
     describe('create new CIA threat', () => {
         let threat;
 
@@ -78,6 +98,26 @@ describe('service/threats/index.js', () => {
 
         it('has a CIA modelType', () => {
             expect(threat.modelType).toEqual('CIA');
+        });
+    });
+
+    describe('create new DIE threat', () => {
+        let threat;
+
+        beforeEach(() => {
+            threat = createNewTypedThreat('DIE');
+        });
+
+        it('has a typed title', () => {
+            expect(threat.title).toEqual('New DIE threat');
+        });
+
+        it('has Distributed type', () => {
+            expect(threat.type).toEqual('Distributed');
+        });
+
+        it('has a DIE modelType', () => {
+            expect(threat.modelType).toEqual('DIE');
         });
     });
 
@@ -115,8 +155,16 @@ describe('service/threats/index.js', () => {
         });
     });
 
+    /**
+     * This structure doesn´t accomodate for the fact that frameworks can have
+     * categories with the same name. This is problem for plot4ai & linddun.
+     * However, this functionality is only used in the v1->v2 migration flow and it is unlikely
+     * to find plot4ai in v1 json files (due to it's recent addition).
+     * PLOT4ai has therefor not been added to these unit-tests
+     */
     describe('convertToTranslationString', () => {
-        it('converts confidentiality to the translation string', () => {
+
+        it('converts Confidentiality to the translation string', () => {
             expect(threats.convertToTranslationString('Confidentiality'))
                 .toEqual('threats.model.cia.confidentiality');
         });
@@ -129,6 +177,21 @@ describe('service/threats/index.js', () => {
         it('converts Availability to the translation string', () => {
             expect(threats.convertToTranslationString('Availability'))
                 .toEqual('threats.model.cia.availability');
+        });
+
+        it('converts Distributed to the translation string', () => {
+            expect(threats.convertToTranslationString('Distributed'))
+                .toEqual('threats.model.die.distributed');
+        });
+
+        it('converts Immutable to the translation string', () => {
+            expect(threats.convertToTranslationString('Immutable'))
+                .toEqual('threats.model.die.immutable');
+        });
+
+        it('converts Ephemeral to the translation string', () => {
+            expect(threats.convertToTranslationString('Ephemeral'))
+                .toEqual('threats.model.die.ephemeral');
         });
 
         it('converts Linkability to the translation string', () => {

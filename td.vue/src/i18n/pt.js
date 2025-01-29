@@ -4,7 +4,8 @@ const por = {
     },
     nav: {
         v2Warning: 'Version 2.0 threat models are not backwardly compatible with version 1.x Threat Dragon models. Imported version 1.x models will be upgraded to the version 2.0 schema',
-        loggedInAs: 'Logado como'
+        loggedInAs: 'Logado como',
+        logOut: 'Log out'
     },
     home: {
         title: 'OWASP Threat Dragon',
@@ -18,6 +19,18 @@ const por = {
         },
         github: {
             displayName: 'GitHub',
+            loginWith: 'Login com'
+        },
+        gitlab: {
+            displayName: 'GitLab',
+            loginWith: 'Login com'
+        },
+        bitbucket: {
+            displayName: 'Bitbucket',
+            loginWith: 'Login com'
+        },
+        google: {
+            displayName: 'Google',
             loginWith: 'Login com'
         },
         local: {
@@ -43,9 +56,12 @@ const por = {
     desktop: {
         file: {
             heading: 'File',
+            clearRecentDocs: 'Clear Menu',
             close: 'Close Model',
+            closeWindow: 'Close Window',
             new: 'New Model',
             open: 'Open Model',
+            recentDocs: 'Open Recent',
             save: 'Save Model',
             saveAs: 'Save Model As'
         },
@@ -67,7 +83,16 @@ const por = {
     branch: {
         select: 'Selecionar uma branch',
         from: 'da lista abaixo ou',
-        chooseRepo: 'escolher outro repositório'
+        chooseRepo: 'escolher outro repositório',
+        or: 'ou',
+        addNew: 'adicionar um novo branch',
+        protectedBranch: 'Branch protegida',
+        nameRequired: 'Nome da branch é obrigatório',
+        nameExists: 'Nome da branch já existe',
+        refBranch: 'Branch de referência',
+        add: 'Adicionar branch',
+        cancel: 'Cancelar',
+        name: 'Nome da branch',
     },
     threatmodelSelect: {
         select: 'Selecion a Threat Model from',
@@ -105,6 +130,16 @@ const por = {
                 defaultDescription: 'New LINDDUN diagram description',
                 select: 'LINDDUN'
             },
+            plot4ai: {
+                defaultTitle: 'New PLOT4ai diagram',
+                defaultDescription: 'New PLOT4ai diagram description',
+                select: 'PLOT4ai'
+            },
+            die: {
+                defaultTitle: 'New DIE diagram',
+                defaultDescription: 'New DIE diagram description',
+                select: 'DIE'
+            },
             cia: {
                 defaultTitle: 'New CIA diagram',
                 defaultDescription: 'New CIA diagram description',
@@ -128,15 +163,20 @@ const por = {
             text: 'Texto',
             description: 'Descrição',
             outOfScope: 'Fora do Escopo',
+            bidirection: 'Bidirectional',
             reasonOutOfScope: 'Razão por estar fora de escopo',
-            privilegeLevel: 'Nível de Privilégio',
+            handlesCardPayment: 'Card payment',
+            handlesGoodsOrServices: 'Goods or Services',
             isALog: 'É um Log',
-            storesCredentials: 'Armazenamento de Credenciais',
             isEncrypted: 'Criptografado',
             isSigned: 'Assinado',
+            isWebApplication: 'Web Application',
+            privilegeLevel: 'Nível de Privilégio',
             providesAuthentication: 'Fornecimento de Autenticação',
             protocol: 'Protocolo',
-            publicNetwork: 'Rede Pública'
+            publicNetwork: 'Rede Pública',
+            storesCredentials: 'Armazenamento de Credenciais',
+            storesInventory: 'Stores Inventory'
         },
         buttons: {
             delete: 'Delete selected',
@@ -180,6 +220,10 @@ const por = {
             zoom: {
                 shortcut: '(ctrl/cmd) + rolagem do mouse',
                 action: 'Zoom'
+            },
+            save: {
+                shortcut: '(ctrl/cmd) + s',
+                action: 'Save'
             }
         },
         stencil: {
@@ -209,6 +253,11 @@ const por = {
         discardTitle: 'Discard Changes?',
         discardMessage: 'Are you sure you want to discard your changes?',
         edit: 'Editar',
+        exportAs: 'Export Model As',
+        exportHtml: 'HTML Reporte',
+        exportPdf: 'PDF Reporte',
+        exportTd: 'Original (Threat Dragon)',
+        exportOtm: 'Open Threat Model (OTM)',
         import: 'Import',
         ok: 'OK',
         open: 'Open',
@@ -219,11 +268,11 @@ const por = {
         report: 'Reporte',
         save: 'Salvar',
         saveAs: 'Save As',
-        saveHtml: 'Save HTML',
         saveModel: 'Save Model',
         saveModelAs: 'Save Model As',
-        savePdf: 'Save PDF',
-        search: 'Search'
+        search: 'Search',
+        next: 'próximo',
+        previous: 'anterior'
     },
     threats: {
         model: {
@@ -233,6 +282,12 @@ const por = {
                 integrity: 'Integrity',
                 availability: 'Availability'
             },
+            die: {
+                header: '--- DIE ---',
+                distributed: 'Distributed',
+                immutable: 'Immutable',
+                ephemeral: 'Ephemeral'
+            },
             linddun: {
                 header: '--- LINDDUN ---',
                 linkability: 'Linkability',
@@ -241,6 +296,17 @@ const por = {
                 detectability: 'Detectability',
                 disclosureOfInformation: 'Disclosure of information',
                 unawareness: 'Unawareness',
+                nonCompliance: 'Non-compliance'
+            },
+            plot4ai: {
+                header: '--- PLOT4ai ---',
+                techniqueProcesses: 'Technique & Processes',
+                accessibility: 'Accessibility',
+                identifiabilityLinkability: 'Identifiability & Linkability',
+                security: 'Security',
+                safety: 'Safety',
+                unawareness: 'Unawareness',
+                ethicsHumanRights: 'Ethics & Human Rights',
                 nonCompliance: 'Non-compliance'
             },
             stride: {
@@ -256,7 +322,9 @@ const por = {
         generic: {
             dafault: 'Nova ameaça genérica',
             cia : 'Nova ameaça da CIA',
+            die : 'Nova ameaça da DIE',
             linddun : 'Nova ameaça LINDDUN',
+            plot4ai : 'Nova ameaça PLOT4ai',
             stride: 'Nova ameaça STRIDE'
         },
         edit: 'Edit Threat',
@@ -285,9 +353,11 @@ const por = {
             mitigated: 'Mitigated'
         },
         priority: {
+            tba: 'TBA',
             low: 'Low',
             medium: 'Medium',
-            high: 'High'
+            high: 'High',
+            critical: 'Critical'
         }
     },
     report: {
@@ -296,6 +366,7 @@ const por = {
             showMitigatedThreats: 'Show mitigated threats',
             showModelDiagrams: 'Show model diagrams',
             showEmpty: 'Show empty elements',
+            showProperties: 'Show element properties',
             showBranding: 'Threat Dragon logo'
         },
         title: 'Relatório do modelo de ameaças para',
@@ -307,9 +378,11 @@ const por = {
             total: 'Ameaças totais',
             mitigated: 'Total Mitigado',
             notMitigated : 'Não atenuado',
+            openCritical : 'Abrir / Crítica Prioridade',
             openHigh : 'Abrir / Alta Prioridade',
             openMedium : 'Abrir / Prioridade Média',
             openLow : 'Abrir / Baixa Prioridade',
+            openTba : 'Abrir / TBA Prioridade',
             openUnknown : 'Prioridade Aberta / Desconhecida'
         }
     },

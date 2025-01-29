@@ -1,7 +1,7 @@
-ARG         NODE_VERSION=18
+ARG         NODE_VERSION=20.17
 
 # The base image with updates applied
-FROM        node:$NODE_VERSION-alpine as base-node
+FROM        node:$NODE_VERSION-alpine AS base-node
 RUN         apk -U upgrade
 WORKDIR     /app
 RUN         npm i -g npm@latest
@@ -12,7 +12,7 @@ USER        node
 
 # Build the front and back-end.  This needs devDependencies which do not
 # need to be included in the final image
-FROM        base-node as build
+FROM        base-node AS build
 RUN         mkdir boms
 
 COPY        package-lock.json package.json /app/
@@ -29,9 +29,15 @@ RUN         npm clean-install --ignore-scripts
 RUN         cd td.server && npm clean-install
 RUN         cd td.vue && npm clean-install
 RUN         npm run build
+RUN         cd td.server && npm run make-sbom
+RUN         cp td.server/sbom.json        boms/threat-dragon-server-bom.json && \
+            cp td.server/sbom.xml         boms/threat-dragon-server-bom.xml  && \
+            cp td.vue/dist/.sbom/bom.json boms/threat-dragon-site-bom.json   && \
+            cp td.vue/dist/.sbom/bom.xml  boms/threat-dragon-site-bom.xml
 
 # Builds the docs
-FROM        imoshtokill/jekyll-bundler as build-docs
+# it would be good to swap out imoshtokill/jekyll-bundler and use jekyll/minimal instead
+FROM        imoshtokill/jekyll-bundler AS build-docs
 WORKDIR     /td.docs
 COPY        ./docs/Gemfile* ./
 RUN         bundle install
@@ -41,9 +47,10 @@ RUN         mkdir downloads
 RUN         bundle exec jekyll build -b docs/
 
 
-# Build the final, production image. 
+# Build the final, production image.
 FROM        base-node
 COPY        --from=build-docs /td.docs/_site /app/docs
+COPY        --from=build /app/boms /app/boms
 
 COPY        ./td.server/package-lock.json ./td.server/package.json ./td.server/
 RUN         cd td.server && npm clean-install --omit dev --ignore-scripts

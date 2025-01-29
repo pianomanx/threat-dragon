@@ -1,4 +1,5 @@
 const path = require('path');
+const { CycloneDxWebpackPlugin } = require('@cyclonedx/webpack-plugin');
 
 require('dotenv').config({ path: process.env.ENV_FILE || path.resolve(__dirname, '../.env') });
 const serverApiProtocol = process.env.SERVER_API_PROTOCOL || 'http';
@@ -39,14 +40,17 @@ module.exports = {
                 publish: {
                     provider: 'github'
                 },
-                afterSign: 'electron-builder-notarize',
                 mac: {
                     category: 'public.app-category.developer-tools',
                     icon: './src/icons/icon.icns',
-                    entitlements: './node_modules/electron-builder-notarize/entitlements.mac.inherit.plist',
                     hardenedRuntime: true,
+                    entitlements: './node_modules/electron-builder-notarize/entitlements.mac.inherit.plist',
+                    entitlementsInherit: './node_modules/electron-builder-notarize/entitlements.mac.inherit.plist',
                     target: [
-                        'default'
+                        {
+                            target: 'default',
+                            arch: ['x64', 'arm64']
+                        }
                     ]
                 },
                 win: {
@@ -54,11 +58,13 @@ module.exports = {
                     target: [
                         {
                             target: 'nsis',
-                            arch: [
-                                'ia32',
-                                'x64'
-                            ]
+                            arch: ['arm64', 'x64']
                         }
+                    ],
+                    rfc3161TimeStampServer: 'http://timestamp.acs.microsoft.com',
+                    signingHashAlgorithms: ['sha256'],
+                    publisherName: [
+                        'Open Source Developer, Antony Jonathan Gadsden'
                     ]
                 },
                 linux: {
@@ -67,8 +73,14 @@ module.exports = {
                     icon: './src/icons/td-256.png',
                     synopsis: 'OWASP Threat Dragon',
                     target: [
-                        'AppImage',
-                        'snap',
+                        {
+                            target: 'AppImage',
+                            arch: ['arm64', 'x64']
+                        },
+                        {
+                            target: 'snap',
+                            arch: ['arm64', 'x64']
+                        },
                         'deb',
                         'rpm'
                     ]
@@ -97,6 +109,14 @@ module.exports = {
     },
     configureWebpack: {
         devtool: 'source-map',
+        plugins: [
+            new CycloneDxWebpackPlugin(
+                {
+                    outputLocation: '.sbom',
+                    specVersion: '1.5'
+                }
+            )
+        ],
         output: {
             hashFunction: 'xxhash64'
         }

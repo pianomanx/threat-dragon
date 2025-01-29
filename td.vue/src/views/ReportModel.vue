@@ -58,6 +58,17 @@
                                 >{{ $t('report.options.showBranding') }}</b-form-checkbox>
                             </b-form-group>
                         </b-col>
+
+                        <b-col>
+                            <b-form-group
+                                label-cols="auto"
+                                id="properties-group">
+                                <b-form-checkbox
+                                    id="show_attributes"
+                                    v-model="display.properties"
+                                >{{ $t('report.options.showProperties') }}</b-form-checkbox>
+                            </b-form-group>
+                        </b-col>
                     </b-form-row>
                 </b-form>
             </b-col>
@@ -69,7 +80,7 @@
                         :onBtnClick="printPdf"
                         v-if="isElectron"
                         icon="file-pdf"
-                        :text="$t('forms.savePdf')" />
+                        :text="$t('forms.exportPdf')" />
                     <td-form-button
                         id="td-print-btn"
                         :onBtnClick="print"
@@ -112,8 +123,9 @@
                 v-for="(diagram, idx) in diagrams"
                 :key="idx"
                 :diagram="diagram"
-                :showOutOfScope="display.outOfScope"
+                :showProperties="display.properties"
                 :showMitigated="display.mitigated"
+                :showOutOfScope="display.outOfScope"
                 :showDiagram="display.diagrams"
                 :showEmpty="display.empty"
             ></td-diagram-detail>
@@ -152,11 +164,11 @@
 
 .sticky {
     position: sticky;
-    top: 45px;
-    width: 100%;
+    top: 55px;
+    margin-top: -5px;
     background-color: $white;
     padding-top: 15px;
-    z-index: 9999;
+    z-index: 100;
 }
 
 .right {
@@ -194,6 +206,7 @@ export default {
                 mitigated: true,
                 outOfScope: true,
                 empty: true,
+                properties: false,
                 branding: false
             },
             isElectron: isElectron()
@@ -205,8 +218,9 @@ export default {
             providerType: (state) => getProviderType(state.provider.selected),
             allThreats: function (state) {
                 return threatService.filter(state.threatmodel.data.detail.diagrams, {
-                    showOutOfScope: true,
                     showMitigated: true,
+                    showOutOfScope: true,
+                    showProperties: false,
                     showEmpty: true
                 });
             }
@@ -230,9 +244,11 @@ export default {
             this.$router.push({ name: `${this.providerType}ThreatModel`, params: this.$route.params });
         },
         print() {
+            console.debug('Print the report window');
             window.print();
         },
         printPdf() {
+            console.debug('Export the report window to PDF (desktop only)');
             if (isElectron()) {
                 // request electron server to print PDF
                 window.electronAPI.modelPrint('PDF');
