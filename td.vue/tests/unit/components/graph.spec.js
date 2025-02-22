@@ -20,9 +20,13 @@ describe('components/GraphButtons.vue', () => {
         localVue = createLocalVue();
         localVue.use(BootstrapVue);
         localVue.use(Vuex);
-        
+
         graphMock = {
-            toJSON: jest.fn().mockReturnValue({ cells: [] })
+            toJSON: jest.fn().mockReturnValue({ cells: [] }),
+            history: {
+                on: jest.fn()
+            },
+            getPlugin: jest.fn().mockReturnValue({ on: jest.fn() })
         };
         routerMock = { push: jest.fn(), params: {} };
         diagramService.edit = jest.fn().mockReturnValue(graphMock);
@@ -52,7 +56,8 @@ describe('components/GraphButtons.vue', () => {
                 }
             },
             actions: {
-                [tmActions.diagramUpdated]: () => {}
+                [tmActions.diagramSaved]: () => {},
+                [tmActions.notModified]: () => {},
             }
         });
         jest.spyOn(storeMock, 'dispatch');
@@ -111,37 +116,8 @@ describe('components/GraphButtons.vue', () => {
     });
 
     it('shows the threat edit modal dialog', () => {
-        wrapper.vm.threatSelected('asdf');
-        expect(threatEditStub.methods.editThreat).toHaveBeenCalledWith('asdf');
-    });
-
-    it('saves the threat model diagram', () => {
-        wrapper.vm.saved();
-        expect(storeMock.dispatch)
-            .toHaveBeenCalledWith(tmActions.diagramUpdated, expect.anything());
-    });
-
-    it('closes the diagram if there were no changes', () => {
-        wrapper.vm.closed();
-        expect(routerMock.push)
-            .toHaveBeenCalledWith({
-                name: 'gitThreatModel',
-                params: routerMock.params
-            });
-    });
-
-    it('prompts the user before closing if data has changed', () => {
-        wrapper.setData({ diagram: { cells: [ 1, 2 ]}});
-        wrapper.vm.closed();
-        expect(wrapper.vm.$bvModal.msgBoxConfirm)
-            .toHaveBeenCalled();
-    });
-
-    it('does not close if the user selects no', () => {
-        wrapper.vm.$bvModal.msgBoxConfirm.mockResolvedValue(false);
-        wrapper.setData({ diagram: { cells: [ 1, 2 ]}});
-        wrapper.vm.closed();
-        expect(routerMock.push).not.toHaveBeenCalled();
+        wrapper.vm.threatSelected('asdf','new');
+        expect(threatEditStub.methods.editThreat).toHaveBeenCalledWith('asdf','new');
     });
 
     it('disposes the graph', () => {

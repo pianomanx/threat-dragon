@@ -42,18 +42,18 @@ describe('components/LocaleSelect.vue', () => {
         });
 
         it('displays the current locale', () => {
-            expect(wrapper.findComponent(BDropdown).attributes('text')).toEqual('eng');
+            expect(wrapper.findComponent(BDropdown).attributes('text')).toEqual('English');
         });
 
         it('has an option for eng', () => {
             expect(wrapper.findAllComponents(BDropdownItem)
-                .filter((c) => c.text() === 'eng').exists()
+                .filter((c) => c.text() === 'English').exists()
             ).toEqual(true);
         });
 
         it('has an option for deu', () => {
             expect(wrapper.findAllComponents(BDropdownItem)
-                .filter((c) => c.text() === 'deu').exists()
+                .filter((c) => c.text() === 'Deutsch').exists()
             ).toEqual(true);
         });
 
@@ -64,21 +64,22 @@ describe('components/LocaleSelect.vue', () => {
 
             it('updates the locale to deu', async () => {
                 await wrapper.findAllComponents(BDropdownItem)
-                    .filter(c => c.text() === 'deu')
+                    .filter(c => c.text() === 'Deutsch')
                     .at(0)
                     .trigger('click');
-                
+
                 expect(mockStore.dispatch).toHaveBeenCalledWith(LOCALE_SELECTED, 'deu');
             });
 
             it('updates the locale to eng', async () => {
                 await wrapper.findAllComponents(BDropdownItem)
-                    .filter(c => c.text() === 'eng')
+                    .filter(c => c.text() === 'English')
                     .at(0)
                     .trigger('click');
-                
+
                 expect(mockStore.dispatch).toHaveBeenCalledWith(LOCALE_SELECTED, 'eng');
             });
+
         });
     });
 

@@ -36,17 +36,15 @@
                             </a>
                         </h6>
                     </template>
-                    <h6 v-if=diagram.description class="diagram-description-text">
-                        <a href="javascript:void(0)" @click="editDiagram(diagram)" class="diagram-edit">
-                            {{ diagram.description }}
-                        </a>
-                    </h6>
-                    <a v-else href="javascript:void(0)" @click="editDiagram(diagram)">
+                    <a href="javascript:void(0)" @click="editDiagram(diagram)">
                         <!-- "thumbnail": "./public/content/images/thumbnail.jpg", -->                        <b-img-lazy
                             class="m-auto d-block td-diagram-thumb"
                             :src="require(`../assets/${diagram.thumbnail ? diagram.thumbnail.split('/').pop() : 'thumbnail.jpg'}`)"
                             :alt="diagram.title" />
                     </a>
+                    <h6 v-if=diagram.description class="diagram-description-text">
+                        {{ diagram.description }}
+                    </h6>
                 </b-card>
             </b-col>
         </b-row>
@@ -68,7 +66,7 @@
                         id="td-close-btn"
                         :onBtnClick="onCloseClick"
                         icon="times"
-                        :text="$t('forms.close')" />
+                        :text="$t('forms.closeModel')" />
                 </b-btn-group>
             </b-col>
         </b-row>
@@ -100,7 +98,7 @@ import { mapState } from 'vuex';
 import { getProviderType } from '@/service/provider/providers.js';
 import TdFormButton from '@/components/FormButton.vue';
 import TdThreatModelSummaryCard from '@/components/ThreatModelSummaryCard.vue';
-import { THREATMODEL_CLEAR, THREATMODEL_DIAGRAM_SELECTED, THREATMODEL_UPDATE } from '@/store/actions/threatmodel.js';
+import tmActions from '@/store/actions/threatmodel.js';
 
 export default {
     name: 'ThreatModel',
@@ -124,7 +122,7 @@ export default {
         },
         onCloseClick(evt) {
             evt.preventDefault();
-            this.$store.dispatch(THREATMODEL_CLEAR);
+            this.$store.dispatch(tmActions.clear);
             this.$router.push('/dashboard');
         },
         getThumbnailUrl(diagram) {
@@ -134,7 +132,7 @@ export default {
             return `../assets/thumbnail.${diagram.diagramType.toLowerCase()}.jpg`;
         },
         editDiagram(diagram) {
-            this.$store.dispatch(THREATMODEL_DIAGRAM_SELECTED, diagram);
+            this.$store.dispatch(tmActions.diagramSelected, diagram);
             const path = `${this.$route.path}/edit/${encodeURIComponent(diagram.title)}`;
             this.$router.push(path);
         }
@@ -145,7 +143,9 @@ export default {
         let diagramTop = this.model.detail.diagramTop === undefined ? 10 : this.model.detail.diagramTop;
         let update = { diagramTop: diagramTop, version: this.version, threatTop: threatTop };
         console.debug('updates: ' + JSON.stringify(update));
-        this.$store.dispatch(THREATMODEL_UPDATE, update);
+        this.$store.dispatch(tmActions.update, update);
+        // if a diagram has just been closed, the history insists on marking the model as modified
+        this.$store.dispatch(tmActions.notModified);
     }
 };
 </script>

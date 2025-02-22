@@ -12,19 +12,26 @@ const fs = require('fs');
 var mainWindow;
 
 // access the i18n message strings
+import ara from '@/i18n/ar.js';
 import deu from '@/i18n/de.js';
 import ell from '@/i18n/el.js';
 import eng from '@/i18n/en.js';
+import fin from '@/i18n/fi.js';
 import fra from '@/i18n/fr.js';
 import hin from '@/i18n/hi.js';
+import id from '@/i18n/id.js';
+import jpn from '@/i18n/ja.js';
+import ms from '@/i18n/ms.js';
 import por from '@/i18n/pt.js';
-import rus from '@/i18n/ru.js';
+// hide RUS & UKR for now: import rus from '@/i18n/ru.js';
 import spa from '@/i18n/es.js';
-import ukr from '@/i18n/uk.js';
+// hide RUS & UKR for now: import ukr from '@/i18n/uk.js';
 import zho from '@/i18n/zh.js';
 
-const messages = { deu, ell, eng, fra, hin, por, rus, spa, ukr, zho };
-const languages = [ 'deu', 'ell', 'eng', 'fra', 'hin', 'por', 'rus', 'spa', 'ukr', 'zho' ];
+const messages = { ara, deu, ell, eng, fin, fra, hin, id, jpn, ms, por, spa, zho };
+// hide RUS & UKR for now: const messages = { ara, deu, ell, eng, fin, fra, hin, id, jpn, ms, por, rus, spa, ukr, zho };
+const languages = [ 'ara', 'deu', 'ell', 'eng', 'fin', 'fra', 'hin', 'id', 'jpn', 'ms', 'por', 'spa', 'zho' ];
+// hide RUS & UKR for now: const languages = [ 'ara', 'deu', 'ell', 'eng', 'fin', 'fra', 'hin', 'id', 'jpn', 'ms', 'por', 'rus', 'spa', 'ukr', 'zho' ];
 const defaultLanguage = 'eng';
 var language = defaultLanguage;
 
@@ -35,22 +42,16 @@ export const model = {
 };
 
 export function getMenuTemplate () {
-    return [
-        ...(isMacOS ? [{ role: 'appMenu' }] : []),
+    var menuTemplate = (isMacOS ? [{ role: 'appMenu' }] : []);
+    menuTemplate.push(
         {
             label: messages[language].desktop.file.heading,
             submenu: [
                 {
                     label: messages[language].desktop.file.open,
                     click () {
-                        openModel();
+                        openModelRequest('');
                     }
-                },
-                {
-                    role: 'recentdocuments',
-                    submenu: [
-                        { role: 'clearrecentdocuments' }
-                    ]
                 },
                 {
                     label: messages[language].desktop.file.save,
@@ -71,27 +72,41 @@ export function getMenuTemplate () {
                     }
                 },
                 {
-                    label: messages[language].forms.savePdf,
-                    click () {
-                        printModel();
-                        modelPrint('PDF');
-                    }
-                },
-                {
-                    label: messages[language].forms.saveHtml,
-                    click () {
-                        printModel();
-                        modelPrint('HTML');
-                    }
+                    label: messages[language].forms.exportAs,
+                    submenu: [
+                        {
+                            label: messages[language].forms.exportHtml,
+                            click () {
+                                printModel('HTML');
+                            }
+                        },
+                        {
+                            label: messages[language].forms.exportPdf,
+                            click () {
+                                printModel('PDF');
+                            }
+                        },
+                        {
+                            label: messages[language].forms.exportOtm,
+                            enabled: false
+                        },
+                        {
+                            label: messages[language].forms.exportTd,
+                            enabled: false
+                        }
+                    ]
                 },
                 {
                     label: messages[language].desktop.file.close,
                     click () {
-                        closeModel();
+                        closeModelRequest();
                     }
                 },
                 { type: 'separator' },
-                { role: 'close' }
+                {
+                    label: messages[language].desktop.file.closeWindow,
+                    role: 'close'
+                }
             ]
         },
         { role: 'editMenu' },
@@ -141,15 +156,37 @@ export function getMenuTemplate () {
                 { role: 'about' }
             ]
         }
-    ];
+    );
+
+    if (isMacOS) {
+        // recent docs only for macos, see www.electronjs.org/docs/latest/api/menu-item#roles
+        menuTemplate[1].submenu.push(
+            {
+                label: messages[language].desktop.file.recentDocs,
+                role: 'recentdocuments',
+                submenu: [
+                    {
+                        label: messages[language].desktop.file.clearRecentDocs,
+                        role: 'clearrecentdocuments'
+                    }
+                ]
+            }
+        );
+    }
+
+    return menuTemplate;
 }
 
 // Open file system dialog and read file contents into model
-function openModel () {
-    if (model.isOpen === true) {
-        logger.log.debug('Checking that the existing model is not modified');
-        logger.log.warn('TODO check from renderer that existing open file is not modified');
+function openModel (filename) {
+    logger.log.debug('Open file with name : ' + filename);
+
+    if (filename !== '') {
+        openModelFile(filename);
+        return;
     }
+
+    // no filename yet, so ask for one
     dialog.showOpenDialog({
         title: messages[language].desktop.file.open,
         properties: ['openFile'],
@@ -159,20 +196,7 @@ function openModel () {
         ]
     }).then(result => {
         if (result.canceled === false) {
-            model.filePath = result.filePaths[0];
-            logger.log.debug(messages[language].desktop.file.open + ': ' + model.filePath);
-            fs.readFile(model.filePath, (err, data) => {
-                if (!err) {
-                    let modelData = JSON.parse(data);
-                    mainWindow.webContents.send('open-model', path.basename(model.filePath), modelData);
-                    model.isOpen = true;
-                    model.fileDirectory = path.dirname(model.filePath);
-                    app.addRecentDocument(model.filePath);
-                } else {
-                    logger.log.warn(messages[language].threatmodel.errors.open + ': ' + err);
-                    model.isOpen = false;
-                }
-            });
+            openModelFile(result.filePaths[0]);
         } else {
             logger.log.debug(messages[language].desktop.file.open + ' : canceled');
         }
@@ -182,16 +206,50 @@ function openModel () {
     });
 }
 
-// prompt the renderer for the model data
-function saveModel () {
-    logger.log.debug(messages[language].desktop.file.save + ': ' + 'prompt renderer for model data');
-    mainWindow.webContents.send('save-model', path.basename(model.filePath));
+// request to the renderer for confirmation that it is OK to open a model file
+function openModelRequest (filename) {
+    logger.log.debug('Request to renderer to open an existing model');
+    mainWindow.webContents.send('open-model-request', filename);
 }
 
+// request to the renderer for confirmation that it is OK to open a model file
+function openModelFile (filename) {
+    logger.log.debug(messages[language].desktop.file.open + ': ' + filename);
+    fs.readFile(filename, (err, data) => {
+        if (!err) {
+            let modelData = JSON.parse(data);
+            mainWindow.webContents.send('open-model', path.basename(filename), modelData);
+            model.filePath = filename;
+            model.isOpen = true;
+            model.fileDirectory = path.dirname(filename);
+            app.addRecentDocument(filename);
+        } else {
+            logger.log.warn(messages[language].threatmodel.errors.open + ': ' + err);
+            model.isOpen = false;
+        }
+    });
+}
+
+// request that the renderer send the model data, retain existing filename
+function saveModel () {
+    if (model.isOpen === false) {
+        logger.log.debug('Skip save request because no model is open');
+        return;
+    }
+    logger.log.debug(messages[language].desktop.file.save + ': ' + 'prompt renderer for model data');
+    mainWindow.webContents.send('save-model-request', path.basename(model.filePath));
+}
+
+// request that the renderer send the model data
 function saveModelAs () {
+    if (model.isOpen === false) {
+        logger.log.debug('Skip saveAs request because no model is open');
+        return;
+    }
     logger.log.debug(messages[language].desktop.file.saveAs + ': ' + 'clear location, prompt renderer for model data');
+    // clear any existing filename to force a SaveAs
     model.filePath = '';
-    mainWindow.webContents.send('save-model', path.basename(model.filePath));
+    mainWindow.webContents.send('save-model-request', path.basename(model.filePath));
 }
 
 // Open saveAs file system dialog and write contents to new file location
@@ -223,46 +281,28 @@ function saveModelDataAs (modelData, fileName) {
     });
 }
 
-// open a new model
+// request that the renderer open a new model
 function newModel () {
     let newName = 'new-model.json';
     logger.log.debug(messages[language].desktop.file.new + ': ' + newName);
-    // prompt the renderer to open a new model
-    mainWindow.webContents.send('new-model', newName);
-    modelOpened();
+    mainWindow.webContents.send('new-model-request', newName);
 }
 
-// print the model report
-function printModel () {
-    logger.log.debug(messages[language].forms.savePdf+ ': ' + model.filePath);
+// request that the renderer display the model report/print page
+function printModel (format) {
+    if (model.isOpen === false) {
+        logger.log.debug('Skip print request because no model open');
+        return;
+    }
+    logger.log.debug(messages[language].forms.exportPdf+ ': ' + model.filePath);
     // prompt the renderer to open the print/report window
-    mainWindow.webContents.send('print-model');
+    mainWindow.webContents.send('print-model-request', format);
 }
 
-// close the model
-function closeModel () {
+// request that the renderer close the model
+function closeModelRequest () {
     logger.log.debug(messages[language].desktop.file.close + ': ' + model.filePath);
-    // prompt the renderer to close the model
-    mainWindow.webContents.send('close-model', path.basename(model.filePath));
-    modelClosed();
-}
-
-// read threat model from file, eg after open-file app module event
-export function readModelData (filePath) {
-    model.filePath = filePath;
-    logger.log.debug(messages[language].desktop.file.open + ': ' + model.filePath);
-
-    fs.readFile(model.filePath, (err, data) => {
-        if (!err) {
-            let modelData = JSON.parse(data);
-            mainWindow.webContents.send('open-model', path.basename(model.filePath), modelData);
-            model.fileDirectory = path.dirname(filePath);
-            model.isOpen = true;
-        } else {
-            logger.log.warn(messages[language].threatmodel.errors.open + ': ' + err);
-            model.isOpen = false;
-        }
-    });
+    mainWindow.webContents.send('close-model-request', path.basename(model.filePath));
 }
 
 // save the threat model
@@ -281,23 +321,7 @@ function saveModelData (modelData) {
     }
 }
 
-// the renderer has requested to save the model with a filename
-export const modelSaved = (modelData, fileName) => {
-    // if the filePath is empty then this is the first time a save has been requested
-    if (!model.filePath || model.filePath === '') {
-        saveModelDataAs(modelData, fileName);
-    } else {
-        saveModelData(modelData);
-    }
-};
-
-// clear out the model, either by menu or by renderer request
-export const modelClosed = () => {
-    model.filePath = '';
-    model.isOpen = false;
-};
-
-// Open saveAs file system dialog and write contents as HTML
+// Open saveAs file system dialog and write report contents as HTML
 function saveHTMLReport (htmlPath) {
     htmlPath += '.html';
     var dialogOptions = {
@@ -326,9 +350,10 @@ function saveHTMLReport (htmlPath) {
 function savePDFReport (pdfPath) {
     pdfPath += '.pdf';
     var dialogOptions = {
-        title: messages[language].forms.savePdf,
+        title: messages[language].forms.exportPdf,
         defaultPath: pdfPath,
-        filters: [{ name: 'PDF report', extensions: ['.pdf'] }, { name: 'All Files', extensions: ['*'] }]
+        properties: ['openFile'],
+        filters: [{ name: 'PDF report', extensions: ['pdf'] }, { name: 'All Files', extensions: ['*'] }]
     };
 
     dialog.showSaveDialog(dialogOptions).then(result => {
@@ -350,29 +375,19 @@ function savePDFReport (pdfPath) {
                 logger.log.error(`Failed to write PDF to ${pdfPath}: `, error);
             });
 
-            logger.log.debug(messages[language].forms.savePdf + ' : ' + pdfPath);
+            logger.log.debug(messages[language].forms.exportPdf + ' : ' + pdfPath);
         } else {
-            logger.log.debug(messages[language].forms.savePdf + ' : canceled');
+            logger.log.debug(messages[language].forms.exportPdf + ' : canceled');
         }
     }).catch(err => {
         logger.log.error(err);
     });
 }
 
-// the renderer has requested a report to be printed
-export const modelPrint = (printer) => {
-    let reportPath = path.join(path.dirname(model.filePath), path.basename(model.filePath, '.json'));
-    if (!model.filePath || model.filePath === '') {
-        reportPath = path.join(__dirname, '/new_model');
-    }
-
-    if (printer === 'PDF') {
-        savePDFReport(reportPath);
-    } else if (printer === 'HTML') {
-        saveHTMLReport(reportPath);
-    } else {
-        logger.log.warn('Print output type not recognised');
-    }
+// the renderer has closeed / cleared out the model
+export const modelClosed = () => {
+    model.filePath = '';
+    model.isOpen = false;
 };
 
 // the renderer has opened a new model
@@ -383,6 +398,33 @@ export const modelOpened = () => {
     model.isOpen = true;
 };
 
+// the renderer has requested a report to be saved
+export const modelPrint = (format) => {
+    let reportPath = path.join(path.dirname(model.filePath), path.basename(model.filePath, '.json'));
+    if (!model.filePath || model.filePath === '') {
+        reportPath = path.join(__dirname, '/new_model');
+    }
+
+    if (format === 'PDF') {
+        savePDFReport(reportPath);
+    } else if (format === 'HTML') {
+        saveHTMLReport(reportPath);
+    } else {
+        logger.log.warn('Report output type not recognised:' + format);
+    }
+};
+
+// the renderer has requested to save the model with a filename
+export const modelSave = (modelData, fileName) => {
+    // if the filePath is empty then this is the first time a save has been requested
+    if (!model.filePath || model.filePath === '') {
+        saveModelDataAs(modelData, fileName);
+    } else {
+        saveModelData(modelData);
+    }
+};
+
+// the renderer has changed the language
 export const setLocale = (locale) => {
     language = languages.includes(locale) ? locale : defaultLanguage;
 };
@@ -396,8 +438,9 @@ export default {
     modelClosed,
     modelOpened,
     modelPrint,
-    modelSaved,
-    readModelData,
+    modelSave,
+    openModel,
+    openModelRequest,
     setLocale,
     setMainWindow
 };

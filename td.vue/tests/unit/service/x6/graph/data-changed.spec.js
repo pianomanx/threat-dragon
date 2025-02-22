@@ -39,7 +39,7 @@ describe('service/x6/graph/data-changed.js', () => {
         });
 
         it('calls updateStyle', () => {
-            expect(cell.updateStyle).toHaveBeenCalledWith('red', '5 2', 3.0);
+            expect(cell.updateStyle).toHaveBeenCalledWith('red', '4 3', 2.5, '');
         });
     });
 
@@ -57,7 +57,7 @@ describe('service/x6/graph/data-changed.js', () => {
         });
 
         it('calls updateStyle', () => {
-            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.0);
+            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.5, '');
         });
     });
 
@@ -72,7 +72,60 @@ describe('service/x6/graph/data-changed.js', () => {
         });
 
         it('calls updateStyle', () => {
-            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.0);
+            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.5, '');
+        });
+    });
+
+    describe('trust boundary box', () => {
+        beforeEach(() => {
+            cell = getCell();
+            cell.constructor = { name: 'BoundaryBox' };
+            cell.isEdge.mockReturnValue(false);
+            cell.getData.mockImplementation(() => ({
+                isTrustBoundary: true
+            }));
+            cell.updateStyle = jest.fn();
+            dataChanged.updateStyleAttrs(cell);
+        });
+
+        it('calls updateStyle', () => {
+            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.5, '');
+        });
+    });
+
+    describe('trust boundary', () => {
+        beforeEach(() => {
+            cell = getCell();
+            cell.constructor = { name: 'Edge' };
+            cell.isEdge.mockReturnValue(true);
+            cell.getData.mockImplementation(() => ({
+                isTrustBoundary: true
+            }));
+            cell.updateStyle = jest.fn();
+            dataChanged.updateStyleAttrs(cell);
+        });
+
+        it('calls updateStyle', () => {
+            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.5, '');
+        });
+    });
+
+    describe('data flow', () => {
+        beforeEach(() => {
+            cell = getCell();
+            cell.isEdge.mockReturnValue(true);
+            cell.constructor = { name: 'Edge' };
+            cell.getData.mockImplementation(() => ({
+                isTrustBoundary: false,
+                isEncrypted: true,
+                isBidirectional: true
+            }));
+            cell.updateStyle = jest.fn();
+            dataChanged.updateStyleAttrs(cell);
+        });
+        
+        it('calls updateStyle', () => {
+            expect(cell.updateStyle).toHaveBeenCalledWith('#333333', null, 1.5, 'block');
         });
     });
 
@@ -85,63 +138,8 @@ describe('service/x6/graph/data-changed.js', () => {
             dataChanged.updateStyleAttrs(cell);
         });
 
-        it('does not call updateStyle for the unknown shape', () => {
+        it('does not call updateStyle', () => {
             expect(cell.updateStyle).not.toBeDefined();
-        });
-    });
-
-    describe('trust boundary', () => {
-        beforeEach(() => {
-            cell = getCell();
-            cell.constructor = { name: 'Edge' };
-            cell.isEdge.mockReturnValue(true);
-            cell.getData.mockImplementation(() => ({
-                isTrustBoundary: true
-            }));
-            dataChanged.updateStyleAttrs(cell);
-        });
-
-        it('sets the strokeWidth', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/strokeWidth', 3);
-        });
-
-        it('removes the source marker', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/sourceMarker', '');
-        });
-
-        it('removes the target marker', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/targetMarker', '');
-        });
-    });
-
-    describe('data flow', () => {
-        beforeEach(() => {
-            cell = getCell();
-            cell.isEdge.mockReturnValue(true);
-            cell.constructor = { name: 'Edge' };
-            cell.getData.mockImplementation(() => ({
-                isTrustBoundary: false,
-                isEncrypted: true
-            }));
-            dataChanged.updateStyleAttrs(cell);
-        });
-        
-        it('sets the stroke', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/stroke', '#333333');
-        });
-
-        it('sets the strokeDasharray', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/strokeDasharray', null);
-        });
-
-        it('sets the target marker to classic', () => {
-            expect(cell.setAttrByPath)
-                .toHaveBeenCalledWith('line/targetMarker/name', 'classic');
         });
     });
 });

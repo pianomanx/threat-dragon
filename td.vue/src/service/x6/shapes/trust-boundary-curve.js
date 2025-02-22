@@ -1,8 +1,46 @@
 import { Shape } from '@antv/x6';
-import defaultProperties from '../../entity/default-properties';
+
+import { tc } from '@/i18n/index.js';
+import defaultProperties from '@/service/entity/default-properties';
 
 const name = 'trust-boundary-curve';
+const defaultLabel = [
+    {
+        markup: [
+            {
+                tagName: 'ellipse',
+                selector: 'labelBody',
+            },
+            {
+                tagName: 'text',
+                selector: 'labelText',
+            },
+        ],
+        attrs: {
+            labelText: {
+                text: tc('threatmodel.shapes.trustBoundary'),
+                textAnchor: 'middle',
+                textVerticalAnchor: 'middle',
+            },
+            labelBody: {
+                ref: 'labelText',
+                refRx: '50%',
+                refRy: '60%',
+                fill: '#fff',
+                strokeWidth: 0,
+            },
+        },
+        position: {
+            distance: 0.5,
+            args: {
+                keepGradient: true,
+                ensureLegibility: true,
+            }
+        },
+    }
+];
 
+// trust boundary curve (edge, dotted line)
 export const TrustBoundaryCurve = Shape.Edge.define({
     constructorName: name,
     width: 200,
@@ -11,37 +49,32 @@ export const TrustBoundaryCurve = Shape.Edge.define({
     attrs: {
         line: {
             strokeWidth: 3,
-            strokeDasharray: '5 5',
+            strokeDasharray: '10 5',
             sourceMarker: null,
             targetMarker: null
-        }
+        },
+        rect: {
+            fill: 'none',
+            stroke: 'none'
+        },
     },
+    labels: defaultLabel,
     connector: 'smooth',
-    labels: [{
-        attrs: {
-            text: {
-                text: ''
-            }
-        }
-    }],
     data: defaultProperties.boundary
 });
 
 TrustBoundaryCurve.prototype.type = 'tm.Boundary';
 
-TrustBoundaryCurve.prototype.updateStyle = function () {};
-
-// TrustBoundaryCurve.prototype.updateStyle = function (color, dash, strokeWidth) {
-//     // this.setAttrByPath('line/stroke', color);
-//     this.setAttrByPath('line/strokeWidth', 3);
-//     this.setAttrByPath('line/strokeDasharray', '5 5');
-// };
-
 TrustBoundaryCurve.prototype.setName = function (name) {
-    this.setLabels([name]);
+    this.setLabels([name]); // not a good look, but forces an Edge redraw
+    let labels = defaultLabel;
+    labels[0].attrs.labelText.text = name;
+    this.setLabels(labels);
 };
 
+TrustBoundaryCurve.prototype.updateStyle = function () {};
+
 export default {
-    TrustBoundaryCurve,
-    name
+    name,
+    TrustBoundaryCurve
 };

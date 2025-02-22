@@ -1,41 +1,42 @@
 <template>
-  <div>
-    <b-row>
-      <b-col md="2">
-        <div ref="stencil_container"></div>
-      </b-col>
-      <b-col md="10">
-        <b-row>
-          <b-col>
-            <h3 class="td-graph-title">{{ diagram.title }}</h3>
-          </b-col>
-          <b-col align="right">
-                <td-graph-buttons :graph="graph" @saved="saved" @closed="closed" />
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <div
-              id="graph-container"
-              ref="graph_container"
-              style="height: 65vh"
-            ></div>
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
-    <td-graph-meta @threatSelected="threatSelected" />
-
     <div>
-        <td-keyboard-shortcuts />
-        <td-threat-edit-dialog ref="threatEditDialog" />
+        <b-row>
+            <b-col md="2">
+                <div ref="stencil_container"></div>
+            </b-col>
+            <b-col md="10">
+                <b-row>
+                    <b-col>
+                        <h3 class="td-graph-title">{{ diagram.title }}</h3>
+                    </b-col>
+                    <b-col align="right">
+                        <td-graph-buttons :graph="graph" @saved="saved" @closed="closed" />
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col style="display: flex;    width: 100vw; ">
+                        <div
+                            id="graph-container"
+                            ref="graph_container"
+                            style="height: 65vh; width: 100%; flex: 1; "
+                        ></div>
+                    </b-col>
+                </b-row>
+            </b-col>
+        </b-row>
+        <td-graph-meta @threatSelected="threatSelected" @threatSuggest="threatSuggest" />
+
+        <div>
+            <td-keyboard-shortcuts />
+            <td-threat-edit-dialog ref="threatEditDialog" />
+            <td-threat-suggest-dialog ref="threatSuggestDialog" />
+        </div>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>
 .td-graph-title {
-  margin-right: 15px;
+    margin-right: 15px;
 }
 </style>
 
@@ -46,6 +47,7 @@ import TdGraphButtons from '@/components/GraphButtons.vue';
 import TdGraphMeta from '@/components/GraphMeta.vue';
 import TdKeyboardShortcuts from '@/components/KeyboardShortcuts.vue';
 import TdThreatEditDialog from '@/components/ThreatEditDialog.vue';
+import TdThreatSuggestDialog from './ThreatSuggestDialog.vue';
 
 import { getProviderType } from '@/service/provider/providers.js';
 import diagramService from '@/service/migration/diagram.js';
@@ -58,7 +60,8 @@ export default {
         TdGraphButtons,
         TdGraphMeta,
         TdKeyboardShortcuts,
-        TdThreatEditDialog
+        TdThreatEditDialog,
+        TdThreatSuggestDialog
     },
     computed: mapState({
         diagram: (state) => state.threatmodel.selectedDiagram,
@@ -76,20 +79,29 @@ export default {
         init() {
             this.graph = diagramService.edit(this.$refs.graph_container, this.diagram);
             stencil.get(this.graph, this.$refs.stencil_container);
-            console.debug('diagram ID: ' + this.diagram.id);
+            this.$store.dispatch(tmActions.notModified);
+            this.graph.getPlugin('history').on('change', () => {
+                const updated = Object.assign({}, this.diagram);
+                updated.cells = this.graph.toJSON().cells;
+                this.$store.dispatch(tmActions.diagramModified, updated);
+            });
         },
-        threatSelected(threatId) {
-            this.$refs.threatEditDialog.editThreat(threatId);
+        threatSelected(threatId,state) {
+            this.$refs.threatEditDialog.editThreat(threatId,state);
+        },
+        threatSuggest(type){
+            this.$refs.threatSuggestDialog.showModal(type);
         },
         saved() {
+            console.debug('Save diagram');
             const updated = Object.assign({}, this.diagram);
             updated.cells = this.graph.toJSON().cells;
-            this.$store.dispatch(tmActions.diagramUpdated, updated);
-            this.$store.dispatch(tmActions.save);
+            this.$store.dispatch(tmActions.diagramSaved, updated);
+            this.$store.dispatch(tmActions.saveModel);
         },
         async closed() {
-            const diagramChanged = JSON.stringify(this.graph.toJSON().cells) !== JSON.stringify(this.diagram.cells);
-            if (!diagramChanged || await this.getConfirmModal()) {
+            if (!this.$store.getters.modelChanged || await this.getConfirmModal()) {
+                await this.$store.dispatch(tmActions.diagramClosed);
                 this.$router.push({ name: `${this.providerType}ThreatModel`, params: this.$route.params });
             }
         },
